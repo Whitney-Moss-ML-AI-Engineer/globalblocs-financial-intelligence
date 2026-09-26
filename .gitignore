@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.pytest_cache/
+.mypy_cache/
+.coverage
+data/raw/*
+data/bronze/*
+data/silver/*
+data/gold/*
+models/artifacts/*
