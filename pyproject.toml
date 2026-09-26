@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "globalblocs-financial-intelligence"
+version = "0.1.0"
+description = "Institutional financial intelligence platform for official economic, financial, regulatory, ML, and AI data."
+requires-python = ">=3.11"
+dependencies = ["pandas>=2.2","numpy>=1.26","requests>=2.32","pydantic>=2.0","scikit-learn>=1.5","statsmodels>=0.14"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0","ruff>=0.6"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
