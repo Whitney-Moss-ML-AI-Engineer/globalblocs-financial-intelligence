@@ -1,0 +1,16 @@
+project: globalblocs
+source_policy: official_or_authoritative_public_sources
+sources:
+  fred: {provider: Federal Reserve Bank of St. Louis, domains: [economic_cycle, monetary_policy, credit, markets]}
+  bea: {provider: U.S. Bureau of Economic Analysis, domains: [economic_cycle, corporate, international]}
+  bls: {provider: U.S. Bureau of Labor Statistics, domains: [economic_cycle, consumer]}
+  census: {provider: U.S. Census Bureau, domains: [economic_cycle, consumer]}
+  sec_edgar: {provider: U.S. Securities and Exchange Commission, domains: [corporate, institutional, structured_finance, risk_compliance]}
+  fdic: {provider: Federal Deposit Insurance Corporation, domains: [banking]}
+  federal_reserve: {provider: Board of Governors of the Federal Reserve System, domains: [banking, credit, monetary_policy, consumer, international]}
+  occ: {provider: Office of the Comptroller of the Currency, domains: [banking, credit, risk_compliance]}
+  cftc: {provider: Commodity Futures Trading Commission, domains: [derivatives, sentiment]}
+  finra: {provider: Financial Industry Regulatory Authority, domains: [markets, sentiment, risk_compliance]}
+  cfpb: {provider: Consumer Financial Protection Bureau, domains: [consumer, risk_compliance]}
+  treasury: {provider: U.S. Department of the Treasury, domains: [international, monetary_policy, markets]}
+  pcaob: {provider: Public Company Accounting Oversight Board, domains: [risk_compliance]}
