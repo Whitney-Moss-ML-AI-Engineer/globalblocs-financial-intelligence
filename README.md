@@ -12,6 +12,12 @@ Build a transparent, auditable financial intelligence system that connects:
 
 The platform is intended for research, portfolio development, quantitative analysis, financial risk analysis, and ML/AI engineering demonstration.
 
+## Dashboard
+
+A graphical end-user interface is now included at `dashboard/index.html`. It provides navigation for Overview, Economics, Markets, ML/Deep Learning, and Data Explorer workflows, with filters, KPI cards, trend charts, risk monitoring, model selection, and JSON export. The current UI uses clearly labeled illustrative data for offline interface testing; production integration should connect it to validated Gold-layer datasets or an API service.
+
+See `dashboard/README.md` for the integration plan.
+
 ## Analytical Domains
 
 1. Economic Cycle
@@ -48,9 +54,9 @@ LLMs are not treated as the source of truth. Deterministic official data and rep
 
 ## Status
 
-**Phase 0 — Engineering Baseline**
+**Phase 0 — Engineering Baseline + Dashboard Prototype**
 
-The repository currently establishes the systems-engineering documentation, requirements, architecture, source registry, Python package structure, testing strategy, and development roadmap. Production data pipelines and models will be added incrementally.
+The repository establishes systems-engineering documentation, requirements, architecture, source registry, Python package structure, testing strategy, development roadmap, and an end-user dashboard prototype. Production data pipelines and models will be added incrementally.
 
 ## Disclaimer
 
