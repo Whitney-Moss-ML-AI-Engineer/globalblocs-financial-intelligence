@@ -14,3 +14,29 @@ sources:
   cfpb: {provider: Consumer Financial Protection Bureau, domains: [consumer, risk_compliance]}
   treasury: {provider: U.S. Department of the Treasury, domains: [international, monetary_policy, markets]}
   pcaob: {provider: Public Company Accounting Oversight Board, domains: [risk_compliance]}
+
+  # Global 25-source expansion
+  world_bank_wdi: {provider: World Bank, domains: [economic_cycle, international, consumer]}
+  imf_weo: {provider: IMF, domains: [economic_cycle, international, monetary_policy]}
+  wto: {provider: World Trade Organization, domains: [international, trade]}
+  un_comtrade: {provider: United Nations, domains: [international, trade]}
+  oecd: {provider: OECD, domains: [economic_cycle, consumer, international]}
+  bis: {provider: Bank for International Settlements, domains: [banking, credit, derivatives, international]}
+  us_treasury_fiscal: {provider: U.S. Department of the Treasury, domains: [monetary_policy, markets, international]}
+  ny_fed_sofr: {provider: Federal Reserve Bank of New York, domains: [monetary_policy, credit, markets]}
+  eia: {provider: U.S. Energy Information Administration, domains: [international, commodities, economic_cycle]}
+  opec: {provider: OPEC, domains: [international, commodities, energy]}
+  iea: {provider: International Energy Agency, domains: [international, commodities, energy]}
+  ecb: {provider: European Central Bank, domains: [monetary_policy, markets, international]}
+  eurostat: {provider: Eurostat, domains: [economic_cycle, consumer, international]}
+  bank_of_england: {provider: Bank of England, domains: [monetary_policy, markets, credit]}
+  bank_of_japan: {provider: Bank of Japan, domains: [monetary_policy, markets, international]}
+  pboc: {provider: People's Bank of China, domains: [monetary_policy, banking, international]}
+  rbi: {provider: Reserve Bank of India, domains: [monetary_policy, banking, international]}
+  unctadstat: {provider: UNCTAD, domains: [international, trade, investment]}
+  faostat: {provider: Food and Agriculture Organization, domains: [commodities, consumer, international]}
+  wgi: {provider: World Bank, domains: [governance, risk_compliance, international]}
+  vdem: {provider: V-Dem Institute, domains: [governance, international, risk_compliance]}
+  pwt: {provider: Groningen Growth and Development Centre, domains: [economic_cycle, productivity, international]}
+  wid: {provider: World Inequality Database, domains: [consumer, economic_cycle, international]}
+  sipri_milex: {provider: Stockholm International Peace Research Institute, domains: [risk_compliance, international, government]}
