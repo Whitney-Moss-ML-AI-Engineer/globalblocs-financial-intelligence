@@ -1,0 +1,36 @@
+project: globalblocs
+registry_version: "1.0"
+source_policy: official_or_authoritative_public_sources
+analysis_framework:
+  descriptive: "What happened?"
+  exploratory: "What's interesting here?"
+  inferential: "What can we conclude about a larger population?"
+  predictive: "What will happen?"
+  causal: "Why did it happen?"
+  mechanistic: "How does it work?"
+sources:
+  - {id: world_bank_wdi, provider: World Bank, dataset: World Development Indicators, access: api}
+  - {id: imf_weo, provider: IMF, dataset: World Economic Outlook/DataMapper, access: api}
+  - {id: wto, provider: WTO, dataset: Timeseries, access: api_key}
+  - {id: un_comtrade, provider: UN, dataset: Comtrade, access: api}
+  - {id: oecd, provider: OECD, dataset: Data Explorer/SDMX, access: api_or_export}
+  - {id: bis, provider: BIS, dataset: Statistics, access: api_or_export}
+  - {id: fred, provider: Federal Reserve Bank of St. Louis, dataset: FRED, access: api_key}
+  - {id: us_treasury_fiscal, provider: U.S. Treasury, dataset: Fiscal Data, access: api}
+  - {id: ny_fed_sofr, provider: Federal Reserve Bank of New York, dataset: Markets Data, access: api}
+  - {id: eia, provider: U.S. EIA, dataset: Open Data API, access: api_key}
+  - {id: opec, provider: OPEC, dataset: Annual Statistical Bulletin, access: export}
+  - {id: iea, provider: IEA, dataset: Energy statistics, access: export}
+  - {id: ecb, provider: ECB, dataset: Data Portal, access: api}
+  - {id: eurostat, provider: Eurostat, dataset: Dissemination API, access: api}
+  - {id: bank_of_england, provider: Bank of England, dataset: IADB, access: export}
+  - {id: bank_of_japan, provider: Bank of Japan, dataset: Time-Series Data, access: export}
+  - {id: pboc, provider: People's Bank of China, dataset: Statistics, access: export}
+  - {id: rbi, provider: Reserve Bank of India, dataset: DBIE, access: export}
+  - {id: unctadstat, provider: UNCTAD, dataset: UNCTADstat, access: export}
+  - {id: faostat, provider: FAO, dataset: FAOSTAT, access: export}
+  - {id: wgi, provider: World Bank, dataset: Worldwide Governance Indicators, access: api}
+  - {id: vdem, provider: V-Dem Institute, dataset: Country-Year Dataset, access: export}
+  - {id: pwt, provider: Groningen Growth and Development Centre, dataset: Penn World Table, access: export}
+  - {id: wid, provider: World Inequality Database, dataset: WID, access: export}
+  - {id: sipri_milex, provider: SIPRI, dataset: Military Expenditure Database, access: export}
