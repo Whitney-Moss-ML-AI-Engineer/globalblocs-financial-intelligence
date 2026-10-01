@@ -26,3 +26,20 @@ def test_risk_and_models():
     assert maximum_drawdown(prices) < 0
     assert pd.notna(sharpe_ratio(prices))
     assert "deep_learning" in list_models()
+
+from globalblocs.api.production_routes import data_quality, risk, business_cycle, RiskRequest, CycleRequest, RecordsRequest
+
+def test_intelligence_workspace_endpoints():
+    quality = data_quality(RecordsRequest(records=[{"date":"2026-01-01","value":100},{"date":"2026-01-02","value":101}]))
+    assert quality["profile"]["rows"] == 2
+    assert quality["quality_score"] > 0
+
+    risk_result = risk(RiskRequest(prices=[100, 101, 99, 103, 102]))
+    assert "maximum_drawdown" in risk_result["risk_summary"]
+
+    cycle = business_cycle(CycleRequest(records=[
+        {"gdp_growth":1.0,"unemployment":5.0,"industrial_production":100,"yield_curve_spread":0.2},
+        {"gdp_growth":1.5,"unemployment":4.8,"industrial_production":101,"yield_curve_spread":0.3},
+        {"gdp_growth":2.0,"unemployment":4.5,"industrial_production":103,"yield_curve_spread":0.4},
+    ]))
+    assert cycle["phase"] in {"Expansion","Transition","Late Cycle / Transition"}
