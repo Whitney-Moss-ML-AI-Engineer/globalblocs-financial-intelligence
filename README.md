@@ -65,3 +65,12 @@ This project is an educational and engineering research platform. It is not inve
 ## License
 
 MIT
+
+
+## 12-Domain U.S. Financial Intelligence Expansion
+
+The repository now includes an official-source architecture covering Economic Cycle, Corporate Financial Health, Banking System, Institutional Investors, Credit Markets, Derivatives Markets, Structured Finance, Consumer Economy, Market Sentiment, International Finance, Monetary Policy, and Risk & Compliance.
+
+See `configs/us_official_data_sources.yaml` for the machine-readable source registry; `docs/07_database/RDBMS_OUTLINE.md` for the RDBMS curriculum/design standard; `docs/08_architecture/SOFTWARE_STACK.md` for the production stack; and `database/schema.sql` for the PostgreSQL reference schema.
+
+Restricted financial-crime datasets such as SAR, CTR, and FBAR are explicitly classified as restricted rather than treated as public API sources.
