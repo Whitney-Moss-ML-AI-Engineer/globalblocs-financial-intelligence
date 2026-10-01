@@ -7,7 +7,7 @@ name = "globalblocs-financial-intelligence"
 version = "0.1.0"
 description = "Institutional financial intelligence platform for official economic, financial, regulatory, ML, and AI data."
 requires-python = ">=3.11"
-dependencies = ["pandas>=2.2","numpy>=1.26","requests>=2.32","pydantic>=2.0","scikit-learn>=1.5","statsmodels>=0.14","scipy>=1.13","pyarrow>=16.0"]
+dependencies = ["pandas>=2.2","numpy>=1.26","requests>=2.32","pydantic>=2.0","fastapi>=0.115","uvicorn[standard]>=0.30","scikit-learn>=1.5","statsmodels>=0.14","scipy>=1.13","pyarrow>=16.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0","ruff>=0.6"]
