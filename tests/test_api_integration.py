@@ -11,7 +11,7 @@ from globalblocs.finance.metric_execution import execute_metric, validate_all_me
 
 
 def test_api_route_contract_and_health():
-    routes = {route.path for route in app.routes}
+    routes = set(app.openapi()["paths"])
     assert "/api/v1/health" in routes
     assert "/api/v1/production/metrics/knowledge-base" in routes
     assert "/api/v1/production/metrics/execute/{metric_id}" in routes
@@ -45,6 +45,6 @@ def test_api_data_quality_risk_and_cycle_workspaces():
 
 
 def test_api_visualization_and_evaluation_route_contracts():
-    paths = {route.path for route in app.routes}
+    paths = set(app.openapi()["paths"])
     assert "/api/v1/production/metrics/knowledge-base/{metric_id}/visualization" in paths
     assert "/api/v1/production/evaluations/{chart_type}" in paths
