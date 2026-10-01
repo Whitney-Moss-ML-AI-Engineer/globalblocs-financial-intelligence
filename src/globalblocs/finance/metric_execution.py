@@ -188,9 +188,11 @@ def execute_metric(metric_id: int, inputs: Mapping[str, Any] | None = None) -> d
     inputs = inputs or {}
     value = _native(metric, inputs)
     mode = "native"
-    if value is None:
+    if value is None or not math.isfinite(float(value)):
         value = _generic(metric, inputs)
         mode = "generic_contract"
+    if value is not None and not math.isfinite(float(value)):
+        value = None
     status = "executed" if value is not None else "insufficient_data"
     return {
         "metric_id": metric_id,
