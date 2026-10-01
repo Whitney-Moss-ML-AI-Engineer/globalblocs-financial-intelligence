@@ -9,3 +9,34 @@
 .metric-chart .point{fill:currentColor;opacity:.75}
 .viz-placeholder{min-height:300px;display:flex;align-items:center;justify-content:center;border:1px dashed currentColor;border-radius:8px;padding:24px;text-align:center}
 .viz-special{padding:40px;text-align:center;border:1px dashed currentColor;border-radius:8px}
+
+
+/* Application navigation */
+.app-shell-nav{position:sticky;top:0;z-index:1000}
+.topbar{min-height:58px;background:#101827;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 22px;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.topbar-brand,.topbar-links,.topbar-actions{display:flex;align-items:center;gap:7px}
+.topbar button{border:1px solid transparent;background:transparent;color:#fff;border-radius:7px;padding:8px 10px;cursor:pointer;font:inherit}
+.topbar button:hover,.topbar button:focus-visible{background:rgba(255,255,255,.1);outline:none}
+.menu-toggle{display:flex!important;align-items:center;gap:7px;font-weight:700!important}
+.home-icon{font-size:18px;line-height:1}
+.topbar-home{font-weight:700!important}
+.topbar-links button{font-size:13px;color:#dbe3f1}
+.topbar-links button:hover{color:#fff}
+.topbar-actions button{font-size:12px;color:#dbe3f1}
+.workspace-nav{position:fixed;top:58px;left:0;bottom:0;width:310px;z-index:1001;margin:0;padding:16px;display:flex;flex-direction:column;gap:6px;background:var(--panel);border-right:1px solid var(--line);box-shadow:8px 0 24px rgba(23,32,51,.12);overflow-y:auto;transform:translateX(-105%);transition:transform .2s ease}
+.workspace-nav.open{transform:translateX(0)}
+.workspace-nav button{width:100%;padding:11px 13px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--ink);cursor:pointer;text-align:left;font:inherit;font-size:13px}
+.workspace-nav button:hover{background:#eef2f8;border-color:var(--line)}
+.workspace-nav .active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.nav-backdrop{position:fixed;inset:58px 0 0;background:rgba(10,18,32,.35);z-index:1000}
+body.menu-open{overflow:hidden}
+@media(max-width:900px){
+  .topbar-links{display:none}
+  .topbar{padding:8px 12px}
+  .topbar-actions button{padding:8px 6px}
+  .menu-label{display:none}
+  .workspace-nav{width:min(88vw,330px)}
+}
+@media(min-width:901px){
+  .workspace-nav{width:340px}
+}
