@@ -21,4 +21,7 @@ $("loadContracts")?.addEventListener("click",loadContracts);
 $("apiContract")?.addEventListener("change",async e=>{try{const d=await get("/api/v1/finance/api-contracts/"+e.target.value);$("apiProvider").value=d.provider}catch(err){}});
 $("reset")?.addEventListener("click",()=>{$("search").value="";document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);render()});
 $("export")?.addEventListener("click",()=>downloadJson("globalblocs-dashboard-view.json",{data_mode:state.dataMode,observations:state.observations,api_analysis:state.api}));
-load();
+load();loadRegistries();
+
+async function loadRegistries(){try{const [m,cx]=await Promise.all([get("/api/v1/finance/metrics"),get("/api/v1/finance/economic-concepts")]);if($("metricRows"))$("metricRows").innerHTML=m.metrics.map(x=>"<tr><td>"+esc(x.id)+"</td><td>"+esc(x.name)+"</td><td>"+esc(x.category)+"</td></tr>").join("");const concepts=[...(cx.macro||[]),...(cx.micro||[])];if($("conceptSelect")){$("conceptSelect").innerHTML=concepts.map(x=>"<option value='"+esc(x.name)+"'>"+esc(x.name)+"</option>").join("");$("conceptSelect").addEventListener("change",loadConcept);loadConcept({target:$("conceptSelect")})}}catch(e){}}
+async function loadConcept(e){const name=e.target.value;try{const d=await get("/api/v1/finance/concept-securities/"+encodeURIComponent(name));$("conceptSecurity").innerHTML=(d.securities||[]).map(x=>"<option>"+esc(x)+"</option>").join("")||"<option>No mapped securities</option>";$("conceptOutput").innerHTML="<p><b>Categories:</b> "+esc((d.categories||[]).join(", "))+"</p>"+showTable("Mapped U.S. Security Universe",(d.securities||[]).map(x=>({security:x}))) }catch(err){$("conceptOutput").innerHTML="<p class='status warn'>"+esc(err.message)+"</p>"}}
