@@ -1,0 +1,601 @@
+version: "1.0"
+purpose: "Global stock-exchange, financial-regulatory, trade, banking, and industry-sector source registry"
+design_principles:
+  - preserve_source_variables: true
+  - lineage_required: true
+  - official_first: true
+  - country_institution_mapping: true
+  - source_faithful_bronze: true
+  - standardized_silver: true
+  - analytical_gold: true
+
+international_benchmark_sources:
+  - id: wfe
+    organization: World Federation of Exchanges
+    domains: [stock_exchanges, market_structure, equities, derivatives, etfs, ipos, liquidity]
+    outputs: [listed_companies, market_capitalization, trading_value, trading_volume, derivatives_activity, listings, liquidity]
+    frequency: monthly_and_annual
+    authority_level: international_industry_association
+  - id: bis
+    organization: Bank for International Settlements
+    domains: [banking, credit, debt_securities, derivatives, property, payments, exchange_rates, central_banks]
+    outputs: [locational_banking, consolidated_banking, debt_securities, credit_to_nonfinancial_sector, debt_service_ratios, derivatives, property_prices, central_bank_assets, policy_rates]
+    frequency: quarterly_or_as_defined
+    authority_level: international_standard_source
+  - id: iosco
+    organization: International Organization of Securities Commissions
+    domains: [securities_regulation, market_supervision, conduct, disclosure]
+    outputs: [regulatory_frameworks, supervisory_information, jurisdictional_membership]
+    frequency: as_published
+    authority_level: international_standard_setter
+  - id: bcbs
+    organization: Basel Committee on Banking Supervision
+    domains: [banking_supervision, capital, liquidity, risk]
+    outputs: [basel_framework, capital_monitoring, liquidity_monitoring, supervisory_frameworks]
+    frequency: as_published
+    authority_level: international_standard_setter
+  - id: wto
+    organization: World Trade Organization
+    domains: [imports, exports, tariffs, services, trade_policy]
+    outputs: [merchandise_trade, services_trade, tariffs, trade_by_product, trade_by_partner]
+    frequency: monthly_quarterly_annual
+    authority_level: international_intergovernmental
+  - id: un_comtrade
+    organization: United Nations Statistics Division
+    dataset: UN Comtrade
+    domains: [imports, exports, commodities, products]
+    outputs: [reporter_partner_trade, hs_sitc_trade, trade_value, quantity]
+    frequency: monthly_annual
+    authority_level: international_intergovernmental
+  - id: unctadstat
+    organization: UN Trade and Development
+    domains: [trade, investment, shipping, productive_capacity, commodities]
+    outputs: [fdi, trade, maritime_transport, commodity_indicators]
+    frequency: mixed
+    authority_level: international_intergovernmental
+  - id: imf
+    organization: International Monetary Fund
+    domains: [macro, balance_of_payments, exchange_rates, fiscal, financial_accounts]
+    outputs: [bop, international_investment_position, exchange_rates, monetary_data, fiscal_data]
+    frequency: mixed
+    authority_level: international_intergovernmental
+  - id: world_bank
+    organization: World Bank
+    domains: [macro, development, industry, trade, finance]
+    outputs: [wdi, financial_inclusion, enterprise_indicators, development_indicators]
+    frequency: annual_or_mixed
+    authority_level: international_intergovernmental
+  - id: oecd
+    organization: OECD
+    domains: [macro, industry, productivity, trade, finance, corporate_governance]
+    outputs: [national_accounts, industry_statistics, productivity, trade, corporate_governance]
+    frequency: mixed
+    authority_level: international_intergovernmental
+
+jurisdiction_source_model:
+  required_roles:
+    exchange: [equities, bonds, etfs, derivatives, listings, trading, market_cap]
+    central_bank: [policy_rate, balance_sheet, monetary, payments, exchange_rates, banking_statistics]
+    banking_supervisor: [capital, liquidity, asset_quality, deposits, loans, bank_failures, prudential_actions]
+    securities_regulator: [issuers, offerings, disclosures, enforcement, market_integrity, funds]
+    trade_authority: [imports, exports, tariffs, customs, trade_by_product, trade_by_partner]
+    statistics_office: [gdp, industry, labor, prices, production, business_demography]
+    sector_agencies: [energy, agriculture, mining, manufacturing, transport, telecom, health, construction]
+    tax_or_finance_ministry: [fiscal, public_debt, revenue, budget, government_finance]
+
+jurisdictions:
+  US:
+    country: United States
+    exchange: [NYSE, Nasdaq, Cboe, CME]
+    central_bank: Federal Reserve
+    banking_supervisor: [OCC, FDIC, Federal Reserve]
+    securities_regulator: SEC
+    trade_authority: [USITC, U.S. Census, CBP]
+    statistics_office: [BEA, BLS, U.S. Census]
+    sector_agencies: [EIA, USDA, DOT, FCC, CMS]
+    finance_ministry: U.S. Treasury
+  CA:
+    country: Canada
+    exchange: [TMX, Toronto Stock Exchange, TSX Venture]
+    central_bank: Bank of Canada
+    banking_supervisor: OSFI
+    securities_regulator: Canadian Securities Administrators
+    trade_authority: [Canada Border Services Agency, Global Affairs Canada, Statistics Canada]
+    statistics_office: Statistics Canada
+    sector_agencies: [Natural Resources Canada, Agriculture and Agri-Food Canada, Transport Canada, ISED]
+    finance_ministry: Department of Finance Canada
+  MX:
+    country: Mexico
+    exchange: [Bolsa Mexicana de Valores, BIVA]
+    central_bank: Banco de México
+    banking_supervisor: CNBV
+    securities_regulator: CNBV
+    trade_authority: SAT/Aduanas de México
+    statistics_office: INEGI
+    sector_agencies: [SENER, Secretaría de Economía, Agricultura]
+    finance_ministry: SHCP
+  BR:
+    country: Brazil
+    exchange: B3
+    central_bank: Banco Central do Brasil
+    banking_supervisor: Banco Central do Brasil
+    securities_regulator: CVM
+    trade_authority: Secretaria de Comércio Exterior
+    statistics_office: IBGE
+    sector_agencies: [ANP, ANEEL, MAPA, ANATEL]
+    finance_ministry: Ministério da Fazenda
+  AR:
+    country: Argentina
+    exchange: BYMA
+    central_bank: Banco Central de la República Argentina
+    banking_supervisor: BCRA
+    securities_regulator: CNV
+    trade_authority: AFIP/Aduana
+    statistics_office: INDEC
+    sector_agencies: [Secretaría de Energía, Secretaría de Agricultura]
+    finance_ministry: Ministerio de Economía
+  CL:
+    country: Chile
+    exchange: [Bolsa de Santiago, Bolsa Electrónica de Chile]
+    central_bank: Banco Central de Chile
+    banking_supervisor: CMF
+    securities_regulator: CMF
+    trade_authority: Servicio Nacional de Aduanas
+    statistics_office: INE Chile
+    sector_agencies: [COCHILCO, Ministerio de Energía, ODEPA]
+    finance_ministry: Ministerio de Hacienda
+  GB:
+    country: United Kingdom
+    exchange: London Stock Exchange
+    central_bank: Bank of England
+    banking_supervisor: Prudential Regulation Authority
+    securities_regulator: Financial Conduct Authority
+    trade_authority: HM Revenue & Customs
+    statistics_office: Office for National Statistics
+    sector_agencies: [Department for Energy Security and Net Zero, Department for Business and Trade, Maritime and Coastguard Agency]
+    finance_ministry: HM Treasury
+  DE:
+    country: Germany
+    exchange: Deutsche Börse / Frankfurt Stock Exchange
+    central_bank: Deutsche Bundesbank
+    banking_supervisor: BaFin
+    securities_regulator: BaFin
+    trade_authority: Federal Statistical Office / German Customs
+    statistics_office: Destatis
+    sector_agencies: [Federal Ministry for Economic Affairs and Climate Action, Federal Network Agency]
+    finance_ministry: Federal Ministry of Finance
+  FR:
+    country: France
+    exchange: Euronext Paris
+    central_bank: Banque de France
+    banking_supervisor: ACPR
+    securities_regulator: Autorité des Marchés Financiers
+    trade_authority: French Customs
+    statistics_office: INSEE
+    sector_agencies: [Ministry for Ecological Transition, Ministry of Agriculture]
+    finance_ministry: Ministry for the Economy and Finance
+  IT:
+    country: Italy
+    exchange: Borsa Italiana
+    central_bank: Banca d'Italia
+    banking_supervisor: Banca d'Italia
+    securities_regulator: CONSOB
+    trade_authority: Italian Customs and Monopolies Agency
+    statistics_office: ISTAT
+    sector_agencies: [Ministry of Enterprises and Made in Italy, GSE]
+    finance_ministry: Ministry of Economy and Finance
+  ES:
+    country: Spain
+    exchange: BME Spanish Exchanges
+    central_bank: Banco de España
+    banking_supervisor: Banco de España
+    securities_regulator: CNMV
+    trade_authority: Spanish Tax Agency / Customs
+    statistics_office: INE
+    sector_agencies: [Ministry for Ecological Transition, Ministry of Agriculture]
+    finance_ministry: Ministry of Finance
+  NL:
+    country: Netherlands
+    exchange: Euronext Amsterdam
+    central_bank: De Nederlandsche Bank
+    banking_supervisor: DNB
+    securities_regulator: AFM
+    trade_authority: Dutch Customs
+    statistics_office: CBS
+    sector_agencies: [Netherlands Enterprise Agency, Ministry of Economic Affairs]
+    finance_ministry: Ministry of Finance
+  CH:
+    country: Switzerland
+    exchange: SIX Swiss Exchange
+    central_bank: Swiss National Bank
+    banking_supervisor: FINMA
+    securities_regulator: FINMA
+    trade_authority: Federal Office for Customs and Border Security
+    statistics_office: Federal Statistical Office
+    sector_agencies: [Federal Office of Energy, Federal Office for Agriculture]
+    finance_ministry: Federal Department of Finance
+  SE:
+    country: Sweden
+    exchange: Nasdaq Stockholm
+    central_bank: Sveriges Riksbank
+    banking_supervisor: Finansinspektionen
+    securities_regulator: Finansinspektionen
+    trade_authority: Swedish Customs
+    statistics_office: Statistics Sweden
+    sector_agencies: [Swedish Energy Agency, Swedish Transport Agency]
+    finance_ministry: Ministry of Finance
+  NO:
+    country: Norway
+    exchange: Oslo Børs
+    central_bank: Norges Bank
+    banking_supervisor: Finanstilsynet
+    securities_regulator: Finanstilsynet
+    trade_authority: Norwegian Customs
+    statistics_office: Statistics Norway
+    sector_agencies: [Norwegian Offshore Directorate, Norwegian Water Resources and Energy Directorate]
+    finance_ministry: Ministry of Finance
+  DK:
+    country: Denmark
+    exchange: Nasdaq Copenhagen
+    central_bank: Danmarks Nationalbank
+    banking_supervisor: Danish Financial Supervisory Authority
+    securities_regulator: Danish FSA
+    trade_authority: Danish Customs
+    statistics_office: Statistics Denmark
+    sector_agencies: [Danish Energy Agency, Danish Agriculture Agency]
+    finance_ministry: Ministry of Finance
+  FI:
+    country: Finland
+    exchange: Nasdaq Helsinki
+    central_bank: Bank of Finland
+    banking_supervisor: FIN-FSA
+    securities_regulator: FIN-FSA
+    trade_authority: Finnish Customs
+    statistics_office: Statistics Finland
+    sector_agencies: [Energy Authority, Natural Resources Institute Finland]
+    finance_ministry: Ministry of Finance
+  PL:
+    country: Poland
+    exchange: Warsaw Stock Exchange
+    central_bank: National Bank of Poland
+    banking_supervisor: KNF
+    securities_regulator: KNF
+    trade_authority: Polish Customs and Tax Service
+    statistics_office: Statistics Poland
+    sector_agencies: [Ministry of Climate and Environment, Ministry of Agriculture]
+    finance_ministry: Ministry of Finance
+  TR:
+    country: Türkiye
+    exchange: Borsa Istanbul
+    central_bank: Central Bank of the Republic of Türkiye
+    banking_supervisor: Banking Regulation and Supervision Agency
+    securities_regulator: Capital Markets Board
+    trade_authority: Ministry of Trade
+    statistics_office: TURKSTAT
+    sector_agencies: [Energy Market Regulatory Authority, Ministry of Industry and Technology]
+    finance_ministry: Ministry of Treasury and Finance
+  SA:
+    country: Saudi Arabia
+    exchange: Saudi Exchange (Tadawul)
+    central_bank: Saudi Central Bank
+    banking_supervisor: Saudi Central Bank
+    securities_regulator: Capital Market Authority
+    trade_authority: ZATCA
+    statistics_office: General Authority for Statistics
+    sector_agencies: [Ministry of Energy, Ministry of Industry and Mineral Resources]
+    finance_ministry: Ministry of Finance
+  AE:
+    country: United Arab Emirates
+    exchange: [Abu Dhabi Securities Exchange, Dubai Financial Market]
+    central_bank: Central Bank of the UAE
+    banking_supervisor: Central Bank of the UAE
+    securities_regulator: Securities and Commodities Authority
+    trade_authority: Federal Customs Authority
+    statistics_office: Federal Competitiveness and Statistics Centre
+    sector_agencies: [Ministry of Energy and Infrastructure, Ministry of Economy]
+    finance_ministry: Ministry of Finance
+  IL:
+    country: Israel
+    exchange: Tel Aviv Stock Exchange
+    central_bank: Bank of Israel
+    banking_supervisor: Bank of Israel Banking Supervision
+    securities_regulator: Israel Securities Authority
+    trade_authority: Israel Tax Authority / Customs
+    statistics_office: Central Bureau of Statistics
+    sector_agencies: [Ministry of Energy, Ministry of Economy and Industry]
+    finance_ministry: Ministry of Finance
+  ZA:
+    country: South Africa
+    exchange: Johannesburg Stock Exchange
+    central_bank: South African Reserve Bank
+    banking_supervisor: Prudential Authority
+    securities_regulator: FSCA
+    trade_authority: SARS Customs
+    statistics_office: Statistics South Africa
+    sector_agencies: [Department of Mineral Resources and Energy, Department of Agriculture]
+    finance_ministry: National Treasury
+  NG:
+    country: Nigeria
+    exchange: Nigerian Exchange Group
+    central_bank: Central Bank of Nigeria
+    banking_supervisor: Central Bank of Nigeria
+    securities_regulator: Securities and Exchange Commission Nigeria
+    trade_authority: Nigeria Customs Service
+    statistics_office: National Bureau of Statistics
+    sector_agencies: [Nigerian Upstream Regulatory Commission, Ministry of Agriculture]
+    finance_ministry: Federal Ministry of Finance
+  EG:
+    country: Egypt
+    exchange: Egyptian Exchange
+    central_bank: Central Bank of Egypt
+    banking_supervisor: Central Bank of Egypt
+    securities_regulator: Financial Regulatory Authority
+    trade_authority: Egyptian Customs Authority
+    statistics_office: CAPMAS
+    sector_agencies: [Ministry of Petroleum, Ministry of Industry]
+    finance_ministry: Ministry of Finance
+  IN:
+    country: India
+    exchange: [NSE India, BSE India]
+    central_bank: Reserve Bank of India
+    banking_supervisor: Reserve Bank of India
+    securities_regulator: SEBI
+    trade_authority: DGFT / Indian Customs
+    statistics_office: MoSPI
+    sector_agencies: [Ministry of Petroleum and Natural Gas, Ministry of Mines, Ministry of Agriculture]
+    finance_ministry: Ministry of Finance
+  JP:
+    country: Japan
+    exchange: Japan Exchange Group / Tokyo Stock Exchange
+    central_bank: Bank of Japan
+    banking_supervisor: Financial Services Agency
+    securities_regulator: Financial Services Agency
+    trade_authority: Japan Customs / Ministry of Finance
+    statistics_office: Statistics Bureau of Japan
+    sector_agencies: [METI, Ministry of Agriculture, Forestry and Fisheries, MLIT]
+    finance_ministry: Ministry of Finance
+  CN:
+    country: China
+    exchange: [Shanghai Stock Exchange, Shenzhen Stock Exchange, Beijing Stock Exchange]
+    central_bank: People's Bank of China
+    banking_supervisor: National Financial Regulatory Administration
+    securities_regulator: China Securities Regulatory Commission
+    trade_authority: General Administration of Customs
+    statistics_office: National Bureau of Statistics
+    sector_agencies: [Ministry of Industry and Information Technology, National Energy Administration, Ministry of Agriculture and Rural Affairs]
+    finance_ministry: Ministry of Finance
+  HK:
+    country: Hong Kong
+    exchange: Hong Kong Exchanges and Clearing
+    central_bank: Hong Kong Monetary Authority
+    banking_supervisor: Hong Kong Monetary Authority
+    securities_regulator: Securities and Futures Commission
+    trade_authority: Census and Statistics Department / Customs and Excise Department
+    statistics_office: Census and Statistics Department
+    sector_agencies: [InvestHK, Innovation and Technology Commission]
+    finance_ministry: Financial Services and the Treasury Bureau
+  KR:
+    country: South Korea
+    exchange: Korea Exchange
+    central_bank: Bank of Korea
+    banking_supervisor: Financial Services Commission / Financial Supervisory Service
+    securities_regulator: Financial Services Commission
+    trade_authority: Korea Customs Service
+    statistics_office: Statistics Korea
+    sector_agencies: [Ministry of Trade Industry and Energy, Ministry of Agriculture]
+    finance_ministry: Ministry of Economy and Finance
+  SG:
+    country: Singapore
+    exchange: Singapore Exchange
+    central_bank: Monetary Authority of Singapore
+    banking_supervisor: Monetary Authority of Singapore
+    securities_regulator: Monetary Authority of Singapore
+    trade_authority: Singapore Customs
+    statistics_office: Singapore Department of Statistics
+    sector_agencies: [Energy Market Authority, Enterprise Singapore]
+    finance_ministry: Ministry of Finance
+  ID:
+    country: Indonesia
+    exchange: Indonesia Stock Exchange
+    central_bank: Bank Indonesia
+    banking_supervisor: OJK
+    securities_regulator: OJK
+    trade_authority: Directorate General of Customs and Excise
+    statistics_office: Statistics Indonesia
+    sector_agencies: [Ministry of Energy and Mineral Resources, Ministry of Industry, Ministry of Agriculture]
+    finance_ministry: Ministry of Finance
+  MY:
+    country: Malaysia
+    exchange: Bursa Malaysia
+    central_bank: Bank Negara Malaysia
+    banking_supervisor: Bank Negara Malaysia
+    securities_regulator: Securities Commission Malaysia
+    trade_authority: Royal Malaysian Customs
+    statistics_office: Department of Statistics Malaysia
+    sector_agencies: [Malaysia External Trade Development Corporation, Ministry of Investment Trade and Industry]
+    finance_ministry: Ministry of Finance
+  TH:
+    country: Thailand
+    exchange: Stock Exchange of Thailand
+    central_bank: Bank of Thailand
+    banking_supervisor: Bank of Thailand
+    securities_regulator: Securities and Exchange Commission Thailand
+    trade_authority: Thai Customs
+    statistics_office: National Statistical Office
+    sector_agencies: [Ministry of Energy, Ministry of Industry, Ministry of Agriculture]
+    finance_ministry: Ministry of Finance
+  TW:
+    country: Taiwan
+    exchange: Taiwan Stock Exchange
+    central_bank: Central Bank of the Republic of China
+    banking_supervisor: Financial Supervisory Commission
+    securities_regulator: Financial Supervisory Commission
+    trade_authority: Customs Administration
+    statistics_office: Directorate-General of Budget Accounting and Statistics
+    sector_agencies: [Ministry of Economic Affairs, Council of Agriculture]
+    finance_ministry: Ministry of Finance
+  AU:
+    country: Australia
+    exchange: Australian Securities Exchange
+    central_bank: Reserve Bank of Australia
+    banking_supervisor: APRA
+    securities_regulator: ASIC
+    trade_authority: Australian Border Force / Department of Home Affairs
+    statistics_office: Australian Bureau of Statistics
+    sector_agencies: [Australian Energy Regulator, Department of Agriculture, Department of Industry]
+    finance_ministry: Treasury
+  NZ:
+    country: New Zealand
+    exchange: NZX
+    central_bank: Reserve Bank of New Zealand
+    banking_supervisor: Reserve Bank of New Zealand
+    securities_regulator: Financial Markets Authority
+    trade_authority: New Zealand Customs Service
+    statistics_office: Stats NZ
+    sector_agencies: [Ministry for Primary Industries, Ministry of Business Innovation and Employment]
+    finance_ministry: The Treasury
+  RU:
+    country: Russia
+    exchange: Moscow Exchange
+    central_bank: Bank of Russia
+    banking_supervisor: Bank of Russia
+    securities_regulator: Bank of Russia
+    trade_authority: Federal Customs Service
+    statistics_office: Rosstat
+    sector_agencies: [Ministry of Energy, Ministry of Agriculture]
+    finance_ministry: Ministry of Finance
+  BRICS_AFRICA:
+    country: South Africa
+    exchange: Johannesburg Stock Exchange
+    central_bank: South African Reserve Bank
+    banking_supervisor: Prudential Authority
+    securities_regulator: FSCA
+    trade_authority: SARS Customs
+    statistics_office: Statistics South Africa
+    sector_agencies: [Mineral Resources and Energy, Agriculture]
+    finance_ministry: National Treasury
+
+sector_data_model:
+  global_classifications: [ISIC, NAICS, NACE, GICS, HS, SITC, CPC]
+  required_sector_dimensions:
+    - sector_code
+    - sector_name
+    - classification_system
+    - country
+    - period
+    - production
+    - revenue_or_output
+    - employment
+    - wages
+    - productivity
+    - imports
+    - exports
+    - investment
+    - capacity
+    - prices
+    - energy_use
+    - business_count
+    - insolvencies
+    - credit_exposure
+  priority_sectors:
+    - banking_and_finance
+    - insurance
+    - energy_oil_gas
+    - mining
+    - manufacturing
+    - semiconductors
+    - technology
+    - telecommunications
+    - transportation
+    - logistics
+    - agriculture
+    - food
+    - pharmaceuticals
+    - healthcare
+    - construction
+    - real_estate
+    - automotive
+    - aerospace_defense
+    - chemicals
+    - utilities
+    - retail
+    - tourism
+    - professional_services
+
+market_data_model:
+  exchange_fields:
+    - exchange_id
+    - country
+    - market_segment
+    - security_id
+    - ticker
+    - isin
+    - issuer
+    - sector
+    - classification
+    - listing_date
+    - currency
+    - price
+    - volume
+    - turnover
+    - market_cap
+    - bid_ask_spread
+    - volatility
+    - corporate_action
+    - trading_status
+    - source_timestamp
+  derivatives_fields:
+    - contract_id
+    - underlying
+    - contract_type
+    - expiry
+    - strike
+    - open_interest
+    - volume
+    - settlement_price
+    - implied_volatility
+    - margin
+    - clearing_house
+
+regulatory_event_model:
+  event_types:
+    - enforcement
+    - supervisory_action
+    - bank_failure
+    - license_action
+    - issuer_filing
+    - market_halt
+    - disclosure
+    - capital_action
+    - sanctions
+    - tariff_action
+    - customs_action
+    - merger
+    - acquisition
+  fields:
+    - jurisdiction
+    - regulator
+    - entity
+    - event_type
+    - event_date
+    - effective_date
+    - severity
+    - legal_reference
+    - source_url
+    - source_document
+    - extracted_text
+    - extraction_method
+
+ingestion_strategy:
+  tier_1:
+    description: "Official machine-readable APIs and bulk downloads"
+    examples: [central_banks, statistics_offices, customs_trade_apis, regulator_apis]
+  tier_2:
+    description: "Official CSV/XLSX/SDMX/PDF publications"
+    examples: [regulatory_reports, annual_reports, sector_bulletins]
+  tier_3:
+    description: "Exchange feeds and licensed market-data interfaces"
+    examples: [exchange_market_data, derivatives, order_book_data]
+  tier_4:
+    description: "International aggregators used for cross-country validation"
+    examples: [BIS, IMF, World Bank, OECD, WTO, WFE]
