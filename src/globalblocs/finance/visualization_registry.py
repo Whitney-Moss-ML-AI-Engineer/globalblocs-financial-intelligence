@@ -169,7 +169,15 @@ def compatible_visualizations(columns, numeric_columns=None):
     return result
 
 def build_metric_visualization_profile(metric):
-    profile = visualization_profile(metric)
+    # Prefer the metric's persisted profile when present; otherwise derive one.
+    persisted = metric.get("visualization") if isinstance(metric, dict) else None
+    if persisted:
+        profile = persisted.copy()
+        profile["available"] = list(persisted.get("available", ALL_VISUALIZATION_IDS))
+        profile["recommended"] = list(persisted.get("recommended", []))
+        profile["default"] = persisted.get("default") or (profile["recommended"][0]["type"] if profile["recommended"] else "line")
+    else:
+        profile = visualization_profile(metric)
     profile["compatibility_rules"] = DATA_REQUIREMENTS
     profile["recommendation_is_restrictive"] = False
     return profile
