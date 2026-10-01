@@ -86,3 +86,82 @@ def visualization_options(metric):
         {**v, "recommended": v["id"] in recommended}
         for v in VISUALIZATIONS
     ]
+
+
+# Universal chart compatibility. "recommended" is advisory; availability is
+# determined by the shape/type of the supplied data, not by metric category.
+ALL_VISUALIZATION_IDS = VISUALIZATION_IDS.copy()
+
+DATA_REQUIREMENTS = {
+    "line": {"min_columns": 1, "numeric": True},
+    "area": {"min_columns": 1, "numeric": True},
+    "bar": {"min_columns": 1, "numeric": True},
+    "stacked_bar": {"min_columns": 2, "numeric": True},
+    "histogram": {"min_columns": 1, "numeric": True},
+    "box": {"min_columns": 1, "numeric": True},
+    "violin": {"min_columns": 1, "numeric": True},
+    "density": {"min_columns": 1, "numeric": True},
+    "ecdf": {"min_columns": 1, "numeric": True},
+    "qq": {"min_columns": 1, "numeric": True},
+    "scatter": {"min_columns": 2, "numeric": True},
+    "bubble": {"min_columns": 3, "numeric": True},
+    "heatmap": {"min_columns": 2, "numeric": True},
+    "correlation_matrix": {"min_columns": 2, "numeric": True},
+    "waterfall": {"min_columns": 1, "numeric": True},
+    "radar": {"min_columns": 2, "numeric": True},
+    "candlestick": {"required_columns": ["Open", "High", "Low", "Close"]},
+    "ohlc": {"required_columns": ["Open", "High", "Low", "Close"]},
+    "drawdown": {"min_columns": 1, "numeric": True},
+    "volatility_cone": {"min_columns": 1, "numeric": True},
+    "acf": {"min_columns": 1, "numeric": True},
+    "pacf": {"min_columns": 1, "numeric": True},
+    "roc": {"required_columns": ["y_true", "y_score"]},
+    "precision_recall": {"required_columns": ["y_true", "y_score"]},
+    "confusion_matrix": {"required_columns": ["y_true", "y_pred"]},
+    "learning_curve": {"required_columns": ["train_score", "validation_score"]},
+    "actual_predicted": {"required_columns": ["actual", "predicted"]},
+    "forecast_interval": {"required_columns": ["date", "forecast"]},
+    "pca_projection": {"min_columns": 2, "numeric": True},
+    "cluster": {"required_columns": ["x", "y", "cluster"]},
+    "dendrogram": {"min_columns": 2, "numeric": True},
+    "feature_importance": {"required_columns": ["feature", "importance"]},
+    "shap": {"required_columns": ["feature", "shap_value"]},
+    "residual": {"required_columns": ["actual", "predicted"]},
+}
+
+def visualization_profile(metric):
+    """Build a reusable metric visualization profile.
+
+    The profile separates recommended charts from the complete selectable
+    library. This allows every metric to use the same visualization engine.
+    """
+    options = visualization_options(metric)
+    recommended = [x for x in options if x["recommended"]]
+    return {
+        "default": recommended[0]["id"] if recommended else "line",
+        "recommended": [
+            {"type": x["id"], "reason": x["reason"]}
+            for x in recommended
+        ],
+        "available": ALL_VISUALIZATION_IDS,
+    }
+
+def compatible_visualizations(columns, numeric_columns=None):
+    """Return charts compatible with the supplied data schema."""
+    columns = list(columns or [])
+    numeric_columns = set(numeric_columns or columns)
+    result = []
+    for chart_id, req in DATA_REQUIREMENTS.items():
+        required = set(req.get("required_columns", []))
+        if required and not required.issubset(set(columns)):
+            continue
+        if req.get("numeric") and len(numeric_columns) < req.get("min_columns", 1):
+            continue
+        result.append(chart_id)
+    return result
+
+def build_metric_visualization_profile(metric):
+    profile = visualization_profile(metric)
+    profile["compatibility_rules"] = DATA_REQUIREMENTS
+    profile["recommendation_is_restrictive"] = False
+    return profile
