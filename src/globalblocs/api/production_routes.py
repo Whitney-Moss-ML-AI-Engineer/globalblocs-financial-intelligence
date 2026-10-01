@@ -129,3 +129,9 @@ class VisualizationCompatibilityRequest(BaseModel):
 @router.post("/visualizations/compatible")
 def visualization_compatibility(request: VisualizationCompatibilityRequest):
     return {"compatible": compatible_visualizations(request.columns, request.numeric_columns)}
+
+from globalblocs.models.evaluation_registry import evaluations_for_visualization
+
+@router.get("/evaluations/{chart_type}")
+def visualization_evaluations(chart_type: str):
+    return {"visualization": chart_type, "evaluation_metrics": evaluations_for_visualization(chart_type)}
