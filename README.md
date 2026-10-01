@@ -88,3 +88,12 @@ The dashboard now has a modular UI and FastAPI service boundary:
 - `docs/10_analytics/DASHBOARD_IMPLEMENTATION.md` — integration and security contract
 
 Run locally with `pip install -e .` and `PYTHONPATH=src uvicorn globalblocs.api.main:app --reload --port 8000`. The dashboard falls back to clearly labeled demo mode when the API is unavailable.
+
+
+## Global Market & Regulatory Expansion
+
+GlobalBLOCS now includes a country-institution source model covering stock exchanges, central banks, banking/prudential supervisors, securities regulators, trade/customs authorities, national statistics offices, finance ministries, and sector agencies. The global registry is in `configs/global_market_regulatory_sources.yaml` and the implementation specification is in `docs/12_global_markets/GLOBAL_MARKETS_AND_REGULATORY_DATA.md`.
+
+The database extension adds jurisdiction, market venue, regulator, classification, sector, trade-observation, market-observation, and sector-observation structures in `database/migrations/002_global_markets_regulatory.sql`.
+
+Global cross-validation sources include WFE exchange statistics, BIS financial statistics, WTO trade statistics, UN Comtrade, IMF, World Bank, OECD, IOSCO and BCBS. National sources remain authoritative where available.
