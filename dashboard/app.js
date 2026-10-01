@@ -13,7 +13,7 @@ function renderApiResult(data){state.api=data;const out=$("apiOutput");if(!out)r
 async function loadContracts(){try{const d=await get("/api/v1/finance/api-contracts");if($("apiContract"))$("apiContract").innerHTML=d.contracts.map(x=>"<option value='"+esc(x.id)+"'>"+esc(x.provider)+"</option>").join("");if($("providerRows"))$("providerRows").innerHTML=d.contracts.map(x=>"<tr><td>"+esc(x.provider)+"</td><td>"+esc(x.canonical_domains.join(", "))+"</td><td>"+esc(x.auth)+"</td></tr>").join("")}catch(e){}}
 async function runApi(){const endpoint=$("apiEndpoint").value.trim();if(!endpoint){alert("Enter an API endpoint.");return}let params={};try{params=JSON.parse($("apiParams").value||"{}")}catch(e){alert("Query Parameters JSON is invalid.");return}const op=$("featureOperation").value;const featureName=$("featureName").value.trim();const source=$("featureSource").value.trim();const features=source&&featureName?[{feature_name:featureName,source_column:source,operation:op,window:Number($("featureWindow").value||20),periods:Number($("featureWindow").value||1)}]:[];const body={provider:$("apiProvider").value,endpoint,method:$("apiMethod").value,auth_method:$("apiAuth").value,credential_name:$("apiCredentialName").value,credential_value:$("apiCredentialValue").value,params,feature_rules:features,transform_rules:[]};const button=$("runApi");button.disabled=true;button.textContent="Running ETL / EDA…";try{const r=await fetch(API_BASE+"/api/v1/finance/ingest-and-analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw Error(d.detail||"API request failed");renderApiResult(d.analysis);setStatus("Credentialed API analyzed • credentials not persisted","good")}catch(e){$("apiOutput").innerHTML="<p class='status warn'>"+esc(e.message)+"</p>"}finally{button.disabled=false;button.textContent="Test Connection + Ingest + ETL/EDA";}}
 function downloadJson(name,obj){const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
-document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(s=>s.hidden=s.id!==b.dataset.page);if(b.dataset.page==="api-intelligence"&&!state.api)loadContracts();if(b.dataset.page==="production")loadProductionCapabilities();if(b.dataset.page==="intelligence")loadIntelligenceWorkspace()});
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(s=>s.hidden=s.id!==b.dataset.page);if(b.dataset.page==="api-intelligence"&&!state.api)loadContracts();if(b.dataset.page==="production")loadProductionCapabilities();if(b.dataset.page==="intelligence")loadIntelligenceWorkspace();if(b.dataset.page==="visualization")loadMetricVisualizationWorkspace()});
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");if(state.api)renderApiResult(state.api)});
 $("search")?.addEventListener("input",render);
 $("runApi")?.addEventListener("click",runApi);$("runRisk")?.addEventListener("click",runRiskAnalytics);
@@ -26,7 +26,48 @@ load();loadRegistries();
 async function loadRegistries(){try{const [m,cx]=await Promise.all([get("/api/v1/finance/metrics"),get("/api/v1/finance/economic-concepts")]);if($("metricRows"))$("metricRows").innerHTML=m.metrics.map(x=>"<tr><td>"+esc(x.id)+"</td><td>"+esc(x.name)+"</td><td>"+esc(x.category)+"</td></tr>").join("");const concepts=[...(cx.macro||[]),...(cx.micro||[])];if($("conceptSelect")){$("conceptSelect").innerHTML=concepts.map(x=>"<option value='"+esc(x.name)+"'>"+esc(x.name)+"</option>").join("");$("conceptSelect").addEventListener("change",loadConcept);loadConcept({target:$("conceptSelect")})}}catch(e){}}
 async function loadConcept(e){const name=e.target.value;try{const d=await get("/api/v1/finance/concept-securities/"+encodeURIComponent(name));$("conceptSecurity").innerHTML=(d.securities||[]).map(x=>"<option>"+esc(x)+"</option>").join("")||"<option>No mapped securities</option>";$("conceptOutput").innerHTML="<p><b>Categories:</b> "+esc((d.categories||[]).join(", "))+"</p>"+showTable("Mapped U.S. Security Universe",(d.securities||[]).map(x=>({security:x}))) }catch(err){$("conceptOutput").innerHTML="<p class='status warn'>"+esc(err.message)+"</p>"}}
 
-async function loadIntelligenceWorkspace(){
+
+async function loadMetricVisualizationWorkspace(){
+  try{
+    const d=await get("/api/v1/production/metrics/knowledge-base");
+    const metrics=d.metrics||[];
+    const opts=metrics.map(m=>"<option value='"+esc(m.id)+"'>"+esc(m.id+" — "+m.name)+"</option>").join("");
+    ["vizMetric","metricA","metricB"].forEach(id=>{if($(id))$(id).innerHTML=opts});
+    await updateMetricVisualization();
+    $("vizMetric")?.addEventListener("change",updateMetricVisualization);
+    $("vizCategory")?.addEventListener("change",loadMetricVisualizationWorkspace);
+    $("vizType")?.addEventListener("change",updateVisualizationExplanation);
+    $("metricA")?.addEventListener("change",updateMetricComparison);
+    $("metricB")?.addEventListener("change",updateMetricComparison);
+    $("vizCompare")?.addEventListener("change",updateMetricComparison);
+    $("vizMode")?.addEventListener("change",updateMetricComparison);
+  }catch(e){if($("vizProfile"))$("vizProfile").innerHTML="<p class='status warn'>"+esc(e.message)+"</p>";}
+}
+async function updateMetricVisualization(){
+  const id=$("vizMetric")?.value||1;
+  try{
+    const m=await get("/api/v1/production/metrics/knowledge-base/"+id);
+    if($("vizProfile"))$("vizProfile").innerHTML="<p><b>"+esc(m.name)+"</b> • "+esc(m.category)+"</p><p>"+esc(m.definition)+"</p><p><b>Formula:</b> "+esc(m.formula)+"</p><p><b>Data:</b> "+esc(m.data_sources.join(", "))+"</p>";
+    const p=await get("/api/v1/production/metrics/knowledge-base/"+id+"/visualization");
+    const types=p.available||[];
+    $("vizType").innerHTML=types.map(x=>"<option value='"+esc(x)+"'>"+esc(x)+(p.recommended.some(r=>r.type===x)?" ★ Recommended":"")+"</option>").join("");
+    $("vizType").value=p.default||types[0];
+    if($("vizWhy"))$("vizWhy").innerHTML=(p.recommended||[]).map(x=>"<p><b>"+esc(x.type)+"</b> — "+esc(x.reason)+"</p>").join("");
+    updateVisualizationExplanation();
+  }catch(e){$("vizProfile").innerHTML="<p class='status warn'>"+esc(e.message)+"</p>";}
+}
+function updateVisualizationExplanation(){
+  const type=$("vizType")?.value||"line";
+  const reasons={line:"Best for time-series trend inspection.",bar:"Best for discrete period or peer comparison.",area:"Emphasizes cumulative magnitude.",histogram:"Shows distribution shape.",box:"Shows median, spread and outliers.",violin:"Shows distribution shape and density.",scatter:"Shows relationships between two numeric variables.",heatmap:"Shows matrix-style relationships such as correlations.",waterfall:"Shows sequential contributions to a total.",candlestick:"Shows OHLC market movement.",drawdown:"Shows peak-to-trough losses.",forecast_interval:"Shows forecasts with uncertainty intervals.",actual_predicted:"Compares observed and model-predicted values.",roc:"Shows classifier discrimination across thresholds.",precision_recall:"Shows precision/recall tradeoffs.",confusion_matrix:"Shows actual versus predicted classes.",pca_projection:"Shows observations in principal-component space.",feature_importance:"Ranks model features by importance.",shap:"Shows feature contribution and direction."};
+  if($("vizCanvas"))$("vizCanvas").innerHTML="<h4>"+esc(type)+"</h4><p>"+esc(reasons[type]||"Compatible visualization selected.")+"</p><p class='note'>Chart rendering is data-driven; this workspace does not restrict the user to the recommendation.</p>";
+}
+function updateMetricComparison(){
+  const a=$("metricA")?.selectedOptions[0]?.textContent||"Metric A";
+  const b=$("metricB")?.selectedOptions[0]?.textContent||"Metric B";
+  const mode=$("vizMode")?.value||"Single Chart";
+  if($("vizCompareOutput"))$("vizCompareOutput").innerHTML="<p><b>"+esc(mode)+"</b>: "+esc(a)+" ↔ "+esc(b)+"</p><p class='note'>Metric-to-metric, peer, benchmark, and SEC-vs-yfinance comparison modes use the same visualization engine when the underlying data is compatible.</p>";
+}
+\nasync function loadIntelligenceWorkspace(){
   try{
     const [domains,blocs,recession,providers,metrics]=await Promise.all([
       get("/api/v1/production/intelligence/domains"),
