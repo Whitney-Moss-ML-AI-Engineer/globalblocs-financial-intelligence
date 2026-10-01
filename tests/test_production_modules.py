@@ -69,3 +69,24 @@ def test_visualization_compatibility_and_evaluation():
     assert "histogram" in compatible
     assert "scatter" not in compatible
     assert "MAE" in evaluations_for_visualization("actual_predicted")
+
+
+from globalblocs.finance.metric_execution import execute_metric, validate_all_metrics, execution_contract
+
+def test_350_metric_execution_and_validation():
+    report = validate_all_metrics({"values": [100.0, 101.0, 103.0, 102.0]})
+    assert report["metric_count"] == 350
+    assert report["validation_pass_count"] == 350
+    assert report["validation_pass_rate"] == 1.0
+    assert report["all_contracts_valid"] is True
+
+def test_native_metric_execution():
+    result = execute_metric(1, {"values": [100.0, 110.0]})
+    assert result["status"] == "executed"
+    assert result["mode"] == "native"
+    assert abs(result["value"] - 0.10) < 1e-12
+
+def test_execution_contract():
+    contract = execution_contract()
+    assert contract["metric_count"] == 350
+    assert contract["point_in_time_required"] is True
