@@ -42,6 +42,7 @@ class CredentialedIngestionRequest(BaseModel):
     username: str = ""
     password: str = ""
     params: dict[str, Any] = Field(default_factory=dict)
+    json_body: dict[str, Any] = Field(default_factory=dict)
     timeout: int = 30
     transform_rules: list[RuleRequest] = Field(default_factory=list)
     feature_rules: list[RuleRequest] = Field(default_factory=list)
@@ -115,7 +116,7 @@ def ingest_and_analyze(request: CredentialedIngestionRequest) -> dict[str, Any]:
         auth_method=request.auth_method, credential_name=request.credential_name,
         credential_value=request.credential_value, api_key_header=request.api_key_header,
         api_key_param=request.api_key_param, username=request.username,
-        password=request.password, params=request.params, timeout=request.timeout,
+        password=request.password, params=request.params, json_body=request.json_body, timeout=request.timeout,
     )
     try:
         result = request_api(config)
