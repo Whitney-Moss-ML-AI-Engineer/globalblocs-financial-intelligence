@@ -1,0 +1,124 @@
+project: GlobalBLOCS
+registry_version: "1.0"
+scope: "Official U.S. government, Federal Reserve, and financial-regulatory sources"
+lineage_required: true
+preserve_source_variables: true
+
+domains:
+  economic_cycle:
+    question: "Where is the economy in the business cycle?"
+    sources:
+      - {id: bea, provider: "Bureau of Economic Analysis", datasets: ["GDP","PCE","personal_income","international_accounts"]}
+      - {id: bls, provider: "Bureau of Labor Statistics", datasets: ["CPI","PPI","employment","unemployment","wages","productivity"]}
+      - {id: fred, provider: "Federal Reserve Bank of St. Louis", datasets: ["macro_series","rates","yield_curve"]}
+      - {id: census_economic_indicators, provider: "U.S. Census Bureau", datasets: ["retail_sales","housing_starts","manufacturing","trade"]}
+      - {id: federal_reserve, provider: "Federal Reserve Board", datasets: ["industrial_production","capacity_utilization","financial_conditions"]}
+    metrics: ["real_gdp","nominal_gdp","gdp_growth","cpi","pce","ppi","unemployment","nonfarm_payrolls","consumer_confidence","retail_sales","industrial_production","capacity_utilization","housing_starts","pmi","yield_curve"]
+
+  corporate_financial_health:
+    question: "Are companies becoming stronger or weaker?"
+    sources:
+      - {id: sec_edgar, provider: "U.S. Securities and Exchange Commission", datasets: ["10-K","10-Q","8-K","DEF 14A","Form 4","13F","S-1","20-F"]}
+      - {id: sec_xbrl, provider: "U.S. Securities and Exchange Commission", datasets: ["companyfacts","frames","facts"]}
+    metrics: ["revenue","ebitda","eps","free_cash_flow","roe","roa","debt_to_equity","gross_margin"]
+
+  banking_system:
+    question: "Are banks healthy and lending?"
+    sources:
+      - {id: fdic_bankfind, provider: "FDIC", datasets: ["bankfind","failures"]}
+      - {id: fdic_call_reports, provider: "FDIC/FFIEC", datasets: ["call_reports"]}
+      - {id: federal_reserve_y9c, provider: "Federal Reserve Board", datasets: ["Y-9C"]}
+      - {id: occ_bank_data, provider: "OCC", datasets: ["bank_statistics","quarterly_performance"]}
+    metrics: ["tier_1_capital","cet1","net_interest_margin","loan_growth","deposit_growth","roa","roe"]
+
+  institutional_investors:
+    question: "What are institutions reporting as holdings and transactions?"
+    sources:
+      - {id: sec_investment_company, provider: "SEC", datasets: ["13F","N-PORT","N-CEN","ADV"]}
+      - {id: sec_ownership, provider: "SEC", datasets: ["Form_4","13D","13G"]}
+    metrics: ["institutional_ownership","insider_buying","insider_selling","sector_exposure","reported_fund_holdings"]
+
+  credit_markets:
+    question: "Is credit risk increasing?"
+    sources:
+      - {id: federal_reserve_z1, provider: "Federal Reserve Board", datasets: ["Z1"]}
+      - {id: occ_credit, provider: "OCC", datasets: ["quarterly_performance"]}
+      - {id: fdic_credit, provider: "FDIC", datasets: ["loan_quality","delinquencies"]}
+      - {id: fred_credit, provider: "FRED", datasets: ["bond_yields","spreads","financial_conditions"]}
+    metrics: ["corporate_bond_yields","municipal_yields","credit_spreads","high_yield","investment_grade"]
+
+  derivatives_markets:
+    question: "How are institutions hedging and positioning risk?"
+    sources:
+      - {id: cftc_cot, provider: "CFTC", datasets: ["commitment_of_traders"]}
+      - {id: cftc_market_data, provider: "CFTC", datasets: ["market_data","swap_data"]}
+      - {id: sec_security_based_swaps, provider: "SEC", datasets: ["security_based_swaps"]}
+    products: ["swaps","options","futures","cds","commodity_swaps","equity_swaps"]
+
+  structured_finance:
+    question: "What is happening in securitized credit?"
+    sources:
+      - {id: sec_abs, provider: "SEC", datasets: ["asset_backed_securities_filings"]}
+      - {id: federal_reserve_financial_stability, provider: "Federal Reserve Board", datasets: ["financial_stability"]}
+      - {id: federal_reserve_z1_structured, provider: "Federal Reserve Board", datasets: ["Z1"]}
+    products: ["MBS","RMBS","CMBS","CLO","CDO","ABS"]
+    metrics: ["mortgage_delinquencies","default_rates","prepayments","credit_enhancement"]
+
+  consumer_economy:
+    question: "Is the consumer healthy?"
+    sources:
+      - {id: cfpb_complaints, provider: "CFPB", datasets: ["consumer_complaints"]}
+      - {id: federal_reserve_g19, provider: "Federal Reserve Board", datasets: ["consumer_credit"]}
+      - {id: census_retail, provider: "U.S. Census Bureau", datasets: ["retail_trade"]}
+    metrics: ["retail_sales","household_debt","savings_rate","credit_cards","auto_loans","student_loans","mortgage_complaints"]
+
+  market_sentiment:
+    question: "What are investors and market participants reporting or positioning for?"
+    sources:
+      - {id: finra_market_data, provider: "FINRA", datasets: ["market_data"]}
+      - {id: finra_short_interest, provider: "FINRA", datasets: ["short_interest"]}
+      - {id: cftc_cot_sentiment, provider: "CFTC", datasets: ["commitment_of_traders"]}
+      - {id: sec_insider_transactions, provider: "SEC", datasets: ["Form_4"]}
+    metrics: ["short_interest","insider_transactions","reported_positioning"]
+
+  international_finance:
+    question: "How are global capital flows affecting the U.S.?"
+    sources:
+      - {id: treasury_tic, provider: "U.S. Treasury", datasets: ["TIC"]}
+      - {id: bea_ita, provider: "BEA", datasets: ["international_transactions_accounts"]}
+      - {id: federal_reserve_h10, provider: "Federal Reserve Board", datasets: ["H10_exchange_rates"]}
+    metrics: ["balance_of_trade","current_account","financial_account","exchange_rates","capital_flows","foreign_treasury_holdings"]
+
+  monetary_policy:
+    question: "What is the Federal Reserve doing?"
+    sources:
+      - {id: federal_reserve_monetary_policy, provider: "Federal Reserve Board", datasets: ["monetary_policy"]}
+      - {id: fomc, provider: "Federal Reserve Board", datasets: ["statements","minutes","SEP","calendar"]}
+      - {id: federal_reserve_statistical_releases, provider: "Federal Reserve Board", datasets: ["H4_1","H6","H8","Z1"]}
+      - {id: fred_policy, provider: "FRED", datasets: ["fed_funds","money_supply","rates"]}
+    metrics: ["fed_funds_rate","money_supply","reverse_repo","reserve_balances","balance_sheet","QT_QE"]
+
+  risk_compliance:
+    question: "Where are systemic and regulatory risks emerging?"
+    sources:
+      - {id: fincen, provider: "FinCEN", datasets: ["public_reports","guidance"]}
+      - {id: sec_enforcement, provider: "SEC", datasets: ["enforcement_actions"]}
+      - {id: finra_brokercheck, provider: "FINRA", datasets: ["broker_information"]}
+      - {id: pcaob_inspections, provider: "PCAOB", datasets: ["inspection_reports"]}
+      - {id: occ_enforcement, provider: "OCC", datasets: ["enforcement_actions"]}
+      - {id: fdic_enforcement, provider: "FDIC", datasets: ["enforcement_decisions_orders"]}
+      - {id: cftc_enforcement, provider: "CFTC", datasets: ["enforcement_actions"]}
+      - {id: cfpb_complaints_risk, provider: "CFPB", datasets: ["consumer_complaints"]}
+    restricted_or_sensitive: ["SAR","CTR","FBAR"]
+
+recommended_core_pipeline:
+  - {priority: 1, source: "Federal Reserve/FRED", role: "macro, rates, money, banking, monetary policy"}
+  - {priority: 2, source: "BEA", role: "GDP, income, international accounts"}
+  - {priority: 3, source: "BLS", role: "employment, inflation, wages, productivity"}
+  - {priority: 4, source: "SEC EDGAR/XBRL", role: "corporate filings, fundamentals, ownership"}
+  - {priority: 5, source: "FDIC/FFIEC", role: "bank condition, call reports, deposits, failures"}
+  - {priority: 6, source: "CFTC", role: "derivatives positioning"}
+  - {priority: 7, source: "FINRA", role: "market data and short interest"}
+  - {priority: 8, source: "CFPB", role: "consumer financial trends and complaints"}
+  - {priority: 9, source: "Treasury", role: "TIC and fiscal/debt data"}
+  - {priority: 10, source: "PCAOB/OCC", role: "audit quality, supervision and enforcement"}
