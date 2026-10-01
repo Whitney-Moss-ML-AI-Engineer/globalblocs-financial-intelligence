@@ -131,6 +131,20 @@ def visualization_compatibility(request: VisualizationCompatibilityRequest):
     return {"compatible": compatible_visualizations(request.columns, request.numeric_columns)}
 
 from globalblocs.models.evaluation_registry import evaluations_for_visualization
+from globalblocs.finance.metric_execution import execute_metric, validate_all_metrics, execution_contract
+
+@router.post("/metrics/execute/{metric_id}")
+def execute_metric_endpoint(metric_id: int, request: RecordsRequest):
+    inputs = request.records[0] if request.records else {}
+    return execute_metric(metric_id, inputs)
+
+@router.get("/metrics/validate")
+def validate_metric_execution():
+    return validate_all_metrics()
+
+@router.get("/metrics/execution-contract")
+def metric_execution_contract():
+    return execution_contract()
 
 @router.get("/evaluations/{chart_type}")
 def visualization_evaluations(chart_type: str):
