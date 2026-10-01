@@ -36,7 +36,7 @@ async function loadIntelligenceWorkspace(){
       get("/api/v1/production/intelligence/metrics")
     ]);
     if($("intelligenceDomains")) $("intelligenceDomains").innerHTML=showTable("Domains",(domains.domains||[]).map(x=>({domain:x.name,focus:x.focus,metrics:(x.metrics||[]).join(", ")})));
-    if($("intelligenceBlocs")) $("intelligenceBlocs").innerHTML=showTable("Economic BLOCs",Object.entries(blocs.blocs||{}).map(([name,members])=>({name,members:(members||[]).join(", ")})))+showTable("Regions",Object.entries(blocs.regions||{}).map(([name,members])=>({name,members?(members||[]).join(", "):"Global"})));
+    if($("intelligenceBlocs")) $("intelligenceBlocs").innerHTML=showTable("Economic BLOCs",Object.entries(blocs.blocs||{}).map(([name,members])=>({name,members:(members||[]).join(", ")})))+showTable("Regions",Object.entries(blocs.regions||{}).map(([name,members])=>({name,members:members?(members||[]).join(", "):"Global"})));
     if($("recessionIndicators")) $("recessionIndicators").innerHTML=showTable("Indicators",Object.entries(recession.indicators||{}).map(([name,code])=>({indicator:name,source_code:code})));
     if($("intelligenceProviders")) $("intelligenceProviders").innerHTML=showTable("Providers",(providers.providers||[]).map(x=>({provider:x.name,category:x.category,access:x.access,priority:x.priority})));
     if($("intelligenceMetrics")) $("intelligenceMetrics").innerHTML=showTable("50 Investment Metrics",(metrics.metrics||[]).map(x=>({id:x.ID,metric:x.Metric,category:x.Category,definition:x.Definition})));
