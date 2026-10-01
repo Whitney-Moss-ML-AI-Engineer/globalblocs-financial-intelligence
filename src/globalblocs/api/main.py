@@ -6,12 +6,15 @@ from typing import Any
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from globalblocs.api.finance_routes import router as finance_router
 
 app = FastAPI(
     title="GlobalBLOCS Financial Intelligence API",
     version="0.2.0",
     description="Evidence-first API layer for the GlobalBLOCS dashboard.",
 )
+
+app.include_router(finance_router)
 
 app.add_middleware(
     CORSMiddleware,
