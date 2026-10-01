@@ -21,6 +21,18 @@ app = FastAPI(
 app.include_router(finance_router)
 app.include_router(production_router)
 
+# Serve the production dashboard from the same FastAPI origin. This keeps the
+# dashboard and API version-aligned and avoids file:// origin/CORS problems.
+DASHBOARD_DIR = Path(__file__).resolve().parents[3] / "dashboard"
+
+if DASHBOARD_DIR.exists():
+    app.mount("/dashboard", StaticFiles(directory=DASHBOARD_DIR, html=True), name="dashboard")
+
+    @app.get("/", include_in_schema=False)
+    def dashboard_root():
+        return FileResponse(DASHBOARD_DIR / "index.html")
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Restrict to the deployed dashboard origin in production.
