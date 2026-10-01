@@ -52,7 +52,6 @@ VISUALIZATIONS = [
     {"id":"source_comparison","name":"Source Comparison","category":"SEC / Provenance","recommended_for":["validation"],"reason":"Compares values from independent sources."},
     {"id":"source_difference","name":"Source Difference","category":"SEC / Provenance","recommended_for":["validation"],"reason":"Shows absolute or percentage differences between sources."},
     {"id":"data_quality","name":"Data Quality Scorecard","category":"SEC / Provenance","recommended_for":["validation"],"reason":"Summarizes completeness, agreement, timeliness, and provenance."},
-,
     {"id":"stacked_bar","name":"Stacked Bar","category":"Comparison","recommended_for":["composition"],"reason":"Compares component contributions across periods or groups."},
     {"id":"bubble","name":"Bubble Chart","category":"Relationship","recommended_for":["multivariate_relationship"],"reason":"Adds a third numeric dimension through marker size."},
     {"id":"correlation_matrix","name":"Correlation Matrix","category":"Relationship","recommended_for":["correlation_matrix","correlation"],"reason":"Shows pairwise correlation across multiple variables."},
