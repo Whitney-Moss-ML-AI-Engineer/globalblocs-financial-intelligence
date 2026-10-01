@@ -43,3 +43,29 @@ def test_intelligence_workspace_endpoints():
         {"gdp_growth":2.0,"unemployment":4.5,"industrial_production":103,"yield_curve_spread":0.4},
     ]))
     assert cycle["phase"] in {"Expansion","Transition","Late Cycle / Transition"}
+
+from globalblocs.finance.metric_knowledge_base import validate_catalog, metric_catalog
+from globalblocs.finance.visualization_registry import visualization_profile, compatible_visualizations
+from globalblocs.models.evaluation_registry import evaluations_for_visualization
+
+def test_350_metric_knowledge_base():
+    result = validate_catalog()
+    assert result["valid"] is True
+    assert result["count"] == 350
+    assert result["unique"] == 350
+    assert result["categories"] == {"return_performance": 100, "portfolio_risk": 100, "risk_adjusted": 50, "quantitative_finance": 100}
+
+def test_metric_visualization_profile_is_unrestricted_by_recommendation():
+    metric = metric_catalog()[0]
+    profile = visualization_profile(metric)
+    assert profile["default"]
+    assert profile["recommended"]
+    assert len(profile["available"]) >= len(profile["recommended"])
+    assert "line" in profile["available"]
+
+def test_visualization_compatibility_and_evaluation():
+    compatible = compatible_visualizations(["date", "value"], ["value"])
+    assert "line" in compatible
+    assert "histogram" in compatible
+    assert "scatter" not in compatible
+    assert "MAE" in evaluations_for_visualization("actual_predicted")
