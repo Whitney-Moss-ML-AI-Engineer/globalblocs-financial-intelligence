@@ -3,7 +3,10 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
-from fastapi import FastAPI, Query\nfrom fastapi.responses import FileResponse\nfrom fastapi.staticfiles import StaticFiles\nfrom pathlib import Path
+from fastapi import FastAPI, Query
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from globalblocs.api.finance_routes import router as finance_router
