@@ -54,9 +54,9 @@ LLMs are not treated as the source of truth. Deterministic official data and rep
 
 ## Status
 
-**Phase 0 — Engineering Baseline + Dashboard Prototype**
+**Phase 1 — Dashboard API Foundation + UI Integration**
 
-The repository establishes systems-engineering documentation, requirements, architecture, source registry, Python package structure, testing strategy, development roadmap, and an end-user dashboard prototype. Production data pipelines and models will be added incrementally.
+The repository establishes systems-engineering documentation, requirements, architecture, source registry, Python package structure, testing strategy, development roadmap, and an end-user dashboard connected to a FastAPI service boundary. The API currently uses explicitly labeled demo observations; validated Gold-layer production data will replace the demo repository incrementally.
 
 ## Disclaimer
 
@@ -74,3 +74,17 @@ The repository now includes an official-source architecture covering Economic Cy
 See `configs/us_official_data_sources.yaml` for the machine-readable source registry; `docs/07_database/RDBMS_OUTLINE.md` for the RDBMS curriculum/design standard; `docs/08_architecture/SOFTWARE_STACK.md` for the production stack; and `database/schema.sql` for the PostgreSQL reference schema.
 
 Restricted financial-crime datasets such as SAR, CTR, and FBAR are explicitly classified as restricted rather than treated as public API sources.
+
+
+## Dashboard Implementation
+
+The dashboard now has a modular UI and FastAPI service boundary:
+
+- `dashboard/index.html` — presentation shell
+- `dashboard/styles.css` — responsive dashboard styling
+- `dashboard/app.js` — API client, filters, state, and export
+- `src/globalblocs/api/main.py` — FastAPI endpoints
+- `docker-compose.yml` — local API container
+- `docs/10_analytics/DASHBOARD_IMPLEMENTATION.md` — integration and security contract
+
+Run locally with `pip install -e .` and `PYTHONPATH=src uvicorn globalblocs.api.main:app --reload --port 8000`. The dashboard falls back to clearly labeled demo mode when the API is unavailable.
