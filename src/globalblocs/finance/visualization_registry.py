@@ -125,6 +125,10 @@ DATA_REQUIREMENTS = {
     "cluster": {"required_columns": ["x", "y", "cluster"]},
     "dendrogram": {"min_columns": 2, "numeric": True},
     "feature_importance": {"required_columns": ["feature", "importance"]},
+    "correlation_matrix": {"min_columns": 2, "numeric": True},
+    "density": {"min_columns": 1, "numeric": True},
+    "radar": {"min_columns": 2, "numeric": True},
+    "waterfall": {"min_columns": 1, "numeric": True},
     "shap": {"required_columns": ["feature", "shap_value"]},
     "residual": {"required_columns": ["actual", "predicted"]},
 }
