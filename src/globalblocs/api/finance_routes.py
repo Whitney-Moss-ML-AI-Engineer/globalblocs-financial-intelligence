@@ -7,7 +7,10 @@ from pydantic import BaseModel, Field
 from globalblocs.finance.api_contracts import list_contracts, get_contract
 from globalblocs.finance.api_ingestion import APIConfig, request_api, normalize_ingested_data, analytical_summary, trend_summary
 from globalblocs.finance.api_etl_eda import api_etl_eda_pipeline
-from globalblocs.finance.investment_metrics import calculate_metrics
+from globalblocs.finance.investment_metrics import calculate_metrics, METRICS
+from globalblocs.finance.economic_concepts import MACRO_CONCEPTS, MICRO_CONCEPTS
+from globalblocs.finance.concept_securities import securities_for_concept, concept_security_categories
+from globalblocs.finance.research_providers import provider_dataframe, product_dataframe, regulatory_dataframe
 
 router = APIRouter(prefix="/api/v1/finance", tags=["financial-intelligence"])
 
@@ -131,3 +134,19 @@ def ingest_and_analyze(request: CredentialedIngestionRequest) -> dict[str, Any]:
         }
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Credentialed API ingestion failed: {exc}")
+
+@router.get("/metrics")
+def metrics_registry() -> dict[str, Any]:
+    return {"metrics":[{"id":i,"name":name,"category":category} for i,name,category in METRICS]}
+
+@router.get("/economic-concepts")
+def economic_concepts() -> dict[str, Any]:
+    return {"macro": MACRO_CONCEPTS, "micro": MICRO_CONCEPTS}
+
+@router.get("/concept-securities/{concept_name}")
+def concept_securities(concept_name: str) -> dict[str, Any]:
+    return {"concept":concept_name,"categories":concept_security_categories(concept_name),"securities":securities_for_concept(concept_name)}
+
+@router.get("/research-providers")
+def research_providers() -> dict[str, Any]:
+    return {"providers":provider_dataframe(),"regulatory_reports":regulatory_dataframe(),"products":product_dataframe()}
