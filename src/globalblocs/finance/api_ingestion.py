@@ -27,6 +27,7 @@ class APIConfig:
     username: str = ""
     password: str = ""
     params: Optional[Dict[str, Any]] = None
+    json_body: Optional[Dict[str, Any]] = None
     timeout: int = 30
 
     def headers(self) -> Dict[str, str]:
@@ -66,6 +67,7 @@ def request_api(config: APIConfig) -> Dict[str, Any]:
         config.endpoint,
         headers=config.headers(),
         params=config.query_params(),
+        json=config.json_body,
         auth=auth,
         timeout=config.timeout,
     )
