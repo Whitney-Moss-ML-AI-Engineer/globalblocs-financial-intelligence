@@ -1,0 +1,27 @@
+"""Configuration-driven API data contracts for GlobalBLOCS.
+
+Contracts describe authentication, raw schema expectations, ETL/EDA controls,
+canonical mappings, feature engineering and downstream analytics. Secrets are
+never stored here.
+"""
+from __future__ import annotations
+from typing import Any
+
+API_DATA_CONTRACTS: dict[str, dict[str, Any]] = {
+    "fred": {"provider":"Federal Reserve Economic Data (FRED)","auth":"API key","refresh":"daily","dataset":"economic time series","documentation":"https://fred.stlouisfed.org/docs/api/fred/","canonical_domains":["economic-cycle","monetary-policy","credit"],"transformations":["to_numeric","to_datetime","percent_to_decimal"],"eda":["missingness","duplicates","outliers","distribution","frequency"],"features":["pct_change","diff","rolling_mean","rolling_std","zscore","lag"],"analytics":["350 financial metrics","hypothesis tests","correlation","ML/DL","trend intelligence"]},
+    "sec-edgar": {"provider":"U.S. Securities and Exchange Commission EDGAR","auth":"public with rate-limit/user-agent controls","refresh":"filing-driven","dataset":"company filings and XBRL facts","documentation":"https://www.sec.gov/edgar","canonical_domains":["corporate-health","institutional-investors","risk-compliance"],"transformations":["type normalization","date normalization","unit normalization","taxonomy mapping"],"eda":["missingness","duplicates","cardinality","outliers","restatement/amendment review"],"features":["growth rates","margins","leverage","cash-flow ratios","lags"],"analytics":["financial ratios","reconciliation","hypothesis tests","ML/DL"]},
+    "fdic": {"provider":"FDIC","auth":"public data/API where available","refresh":"scheduled","dataset":"bank financial and supervisory data","documentation":"https://www.fdic.gov/","canonical_domains":["banking","credit","risk-compliance"],"transformations":["numeric coercion","period normalization","unit normalization"],"eda":["missingness","outliers","institution coverage","period completeness"],"features":["growth","capital ratios","liquidity ratios","rolling statistics"],"analytics":["banking health","risk indicators","trend intelligence","ML/DL"]},
+    "federal-reserve": {"provider":"Federal Reserve","auth":"public/credentialed by dataset","refresh":"scheduled","dataset":"FRED, H.4.1, H.6, H.8, Z.1 and related series","documentation":"https://www.federalreserve.gov/data.htm","canonical_domains":["economic-cycle","banking","monetary-policy","international"],"transformations":["date normalization","frequency alignment","unit conversion"],"eda":["missingness","frequency consistency","outliers","structural breaks"],"features":["changes","growth","spreads","rolling statistics","lags"],"analytics":["business cycle","monetary policy","correlation","ML/DL"]},
+    "world-bank": {"provider":"World Bank","auth":"public API","refresh":"scheduled","dataset":"country economic indicators","documentation":"https://data.worldbank.org/","canonical_domains":["economic-cycle","international","consumer"],"transformations":["country-code normalization","year/date normalization","unit normalization"],"eda":["country coverage","missingness","outliers","distribution"],"features":["YoY growth","differences","rolling statistics","lags"],"analytics":["BLOC comparison","recession intelligence","trend intelligence","ML/DL"]},
+    "cftc": {"provider":"Commodity Futures Trading Commission","auth":"public datasets/API where available","refresh":"weekly/scheduled","dataset":"Commitment of Traders and derivatives reports","documentation":"https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm","canonical_domains":["derivatives","sentiment","risk-compliance"],"transformations":["contract/date normalization","numeric coercion","position sign normalization"],"eda":["missingness","position outliers","contract coverage"],"features":["net positioning","changes","rolling z-scores","lags"],"analytics":["positioning","volatility","trend intelligence","ML/DL"]},
+    "finra": {"provider":"FINRA","auth":"public/credentialed by dataset","refresh":"scheduled","dataset":"broker/dealer, market and regulatory datasets","documentation":"https://www.finra.org/","canonical_domains":["sentiment","risk-compliance","credit"],"transformations":["identifier normalization","date normalization","numeric coercion"],"eda":["missingness","coverage","outliers","cardinality"],"features":["short-interest changes","activity ratios","rolling statistics"],"analytics":["market structure","risk indicators","trend intelligence"]},
+    "custom-credentialed": {"provider":"Custom Credentialed API","auth":"Bearer/API key/Basic auth","refresh":"user-defined","dataset":"provider-defined","documentation":"provider documentation required","canonical_domains":["user-defined"],"transformations":["provider-defined schema mapping","type conversion","unit conversion","date normalization"],"eda":["missingness","duplicates","outliers","distribution","cardinality","data quality"],"features":["raw","pct_change","diff","rolling_mean","rolling_std","zscore","log1p","lag"],"analytics":["350 financial metrics","hypothesis tests","correlation","ML/DL","trend intelligence"]},
+}
+
+def list_contracts() -> list[dict[str, Any]]:
+    return [{"id":k, **v} for k,v in API_DATA_CONTRACTS.items()]
+
+def get_contract(contract_id: str) -> dict[str, Any]:
+    if contract_id not in API_DATA_CONTRACTS:
+        raise KeyError(contract_id)
+    return {"id":contract_id, **API_DATA_CONTRACTS[contract_id]}
