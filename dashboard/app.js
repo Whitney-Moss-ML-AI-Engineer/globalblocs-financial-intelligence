@@ -54,6 +54,7 @@ async function updateMetricVisualization(){
     $("vizType").value=p.default||types[0];
     if($("vizWhy"))$("vizWhy").innerHTML=(p.recommended||[]).map(x=>"<p><b>"+esc(x.type)+"</b> — "+esc(x.reason)+"</p>").join("");
     updateVisualizationExplanation();
+    fetch(API_BASE+"/api/v1/production/metrics/validate").then(r=>r.json()).then(v=>{if($("metricExecutionValidation")) $("metricExecutionValidation").innerHTML="<b>"+esc(v.validation_pass_count)+"/"+esc(v.metric_count)+" contracts validated</b> • Native: "+esc(v.native_execution_count)+" • Generic contract: "+esc(v.generic_contract_count);}).catch(()=>{});
   }catch(e){$("vizProfile").innerHTML="<p class='status warn'>"+esc(e.message)+"</p>";}
 }
 function updateVisualizationExplanation(){
@@ -67,7 +68,8 @@ function updateMetricComparison(){
   const mode=$("vizMode")?.value||"Single Chart";
   if($("vizCompareOutput"))$("vizCompareOutput").innerHTML="<p><b>"+esc(mode)+"</b>: "+esc(a)+" ↔ "+esc(b)+"</p><p class='note'>Metric-to-metric, peer, benchmark, and SEC-vs-yfinance comparison modes use the same visualization engine when the underlying data is compatible.</p>";
 }
-\nasync function loadIntelligenceWorkspace(){
+
+async function loadIntelligenceWorkspace(){
   try{
     const [domains,blocs,recession,providers,metrics]=await Promise.all([
       get("/api/v1/production/intelligence/domains"),
