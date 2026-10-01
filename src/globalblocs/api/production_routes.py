@@ -95,3 +95,37 @@ def business_cycle(request: CycleRequest):
     )
     result["quality_score"] = quality_score(frame)
     return result
+
+from globalblocs.finance.metric_knowledge_base import metric_catalog as metric_knowledge_catalog, get_metric as get_metric_knowledge, search_metrics as search_metric_knowledge, validate_catalog as validate_metric_catalog
+from globalblocs.finance.visualization_registry import build_metric_visualization_profile, compatible_visualizations, VISUALIZATIONS
+
+@router.get("/metrics/knowledge-base")
+def metric_knowledge_base(query: str = "", category: str = ""):
+    metrics = search_metric_knowledge(query, category or None)
+    return {"count": len(metrics), "catalog_validation": validate_metric_catalog(), "metrics": metrics}
+
+@router.get("/metrics/knowledge-base/{metric_id}")
+def metric_knowledge(metric_id: int):
+    metric = get_metric_knowledge(metric_id)
+    if metric is None:
+        raise HTTPException(status_code=404, detail="Metric not found")
+    return metric
+
+@router.get("/metrics/knowledge-base/{metric_id}/visualization")
+def metric_visualization_profile(metric_id: int):
+    metric = get_metric_knowledge(metric_id)
+    if metric is None:
+        raise HTTPException(status_code=404, detail="Metric not found")
+    return build_metric_visualization_profile(metric)
+
+@router.get("/visualizations")
+def visualization_library():
+    return {"count": len(VISUALIZATIONS), "visualizations": VISUALIZATIONS}
+
+class VisualizationCompatibilityRequest(BaseModel):
+    columns: list[str] = Field(default_factory=list)
+    numeric_columns: list[str] = Field(default_factory=list)
+
+@router.post("/visualizations/compatible")
+def visualization_compatibility(request: VisualizationCompatibilityRequest):
+    return {"compatible": compatible_visualizations(request.columns, request.numeric_columns)}
