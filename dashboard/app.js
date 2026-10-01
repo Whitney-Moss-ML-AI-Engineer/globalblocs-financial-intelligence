@@ -13,10 +13,10 @@ function renderApiResult(data){state.api=data;const out=$("apiOutput");if(!out)r
 async function loadContracts(){try{const d=await get("/api/v1/finance/api-contracts");if($("apiContract"))$("apiContract").innerHTML=d.contracts.map(x=>"<option value='"+esc(x.id)+"'>"+esc(x.provider)+"</option>").join("");if($("providerRows"))$("providerRows").innerHTML=d.contracts.map(x=>"<tr><td>"+esc(x.provider)+"</td><td>"+esc(x.canonical_domains.join(", "))+"</td><td>"+esc(x.auth)+"</td></tr>").join("")}catch(e){}}
 async function runApi(){const endpoint=$("apiEndpoint").value.trim();if(!endpoint){alert("Enter an API endpoint.");return}let params={};try{params=JSON.parse($("apiParams").value||"{}")}catch(e){alert("Query Parameters JSON is invalid.");return}const op=$("featureOperation").value;const featureName=$("featureName").value.trim();const source=$("featureSource").value.trim();const features=source&&featureName?[{feature_name:featureName,source_column:source,operation:op,window:Number($("featureWindow").value||20),periods:Number($("featureWindow").value||1)}]:[];const body={provider:$("apiProvider").value,endpoint,method:$("apiMethod").value,auth_method:$("apiAuth").value,credential_name:$("apiCredentialName").value,credential_value:$("apiCredentialValue").value,params,feature_rules:features,transform_rules:[]};const button=$("runApi");button.disabled=true;button.textContent="Running ETL / EDA…";try{const r=await fetch(API_BASE+"/api/v1/finance/ingest-and-analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw Error(d.detail||"API request failed");renderApiResult(d.analysis);setStatus("Credentialed API analyzed • credentials not persisted","good")}catch(e){$("apiOutput").innerHTML="<p class='status warn'>"+esc(e.message)+"</p>"}finally{button.disabled=false;button.textContent="Test Connection + Ingest + ETL/EDA";}}
 function downloadJson(name,obj){const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
-document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(s=>s.hidden=s.id!==b.dataset.page);if(b.dataset.page==="api-intelligence"&&!state.api)loadContracts();if(b.dataset.page==="production")loadProductionCapabilities()});
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(s=>s.hidden=s.id!==b.dataset.page);if(b.dataset.page==="api-intelligence"&&!state.api)loadContracts();if(b.dataset.page==="production")loadProductionCapabilities();if(b.dataset.page==="intelligence")loadIntelligenceWorkspace()});
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");if(state.api)renderApiResult(state.api)});
 $("search")?.addEventListener("input",render);
-$("runApi")?.addEventListener("click",runApi);
+$("runApi")?.addEventListener("click",runApi);$("runRisk")?.addEventListener("click",runRiskAnalytics);
 $("loadContracts")?.addEventListener("click",loadContracts);
 $("apiContract")?.addEventListener("change",async e=>{try{const d=await get("/api/v1/finance/api-contracts/"+e.target.value);$("apiProvider").value=d.provider}catch(err){}});
 $("reset")?.addEventListener("click",()=>{$("search").value="";document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);render()});
@@ -26,6 +26,31 @@ load();loadRegistries();
 async function loadRegistries(){try{const [m,cx]=await Promise.all([get("/api/v1/finance/metrics"),get("/api/v1/finance/economic-concepts")]);if($("metricRows"))$("metricRows").innerHTML=m.metrics.map(x=>"<tr><td>"+esc(x.id)+"</td><td>"+esc(x.name)+"</td><td>"+esc(x.category)+"</td></tr>").join("");const concepts=[...(cx.macro||[]),...(cx.micro||[])];if($("conceptSelect")){$("conceptSelect").innerHTML=concepts.map(x=>"<option value='"+esc(x.name)+"'>"+esc(x.name)+"</option>").join("");$("conceptSelect").addEventListener("change",loadConcept);loadConcept({target:$("conceptSelect")})}}catch(e){}}
 async function loadConcept(e){const name=e.target.value;try{const d=await get("/api/v1/finance/concept-securities/"+encodeURIComponent(name));$("conceptSecurity").innerHTML=(d.securities||[]).map(x=>"<option>"+esc(x)+"</option>").join("")||"<option>No mapped securities</option>";$("conceptOutput").innerHTML="<p><b>Categories:</b> "+esc((d.categories||[]).join(", "))+"</p>"+showTable("Mapped U.S. Security Universe",(d.securities||[]).map(x=>({security:x}))) }catch(err){$("conceptOutput").innerHTML="<p class='status warn'>"+esc(err.message)+"</p>"}}
 
+async function loadIntelligenceWorkspace(){
+  try{
+    const [domains,blocs,recession,providers,metrics]=await Promise.all([
+      get("/api/v1/production/intelligence/domains"),
+      get("/api/v1/production/intelligence/blocs"),
+      get("/api/v1/production/intelligence/recession-indicators"),
+      get("/api/v1/production/intelligence/research-providers"),
+      get("/api/v1/production/intelligence/metrics")
+    ]);
+    if($("intelligenceDomains")) $("intelligenceDomains").innerHTML=showTable("Domains",(domains.domains||[]).map(x=>({domain:x.name,focus:x.focus,metrics:(x.metrics||[]).join(", ")})));
+    if($("intelligenceBlocs")) $("intelligenceBlocs").innerHTML=showTable("Economic BLOCs",Object.entries(blocs.blocs||{}).map(([name,members])=>({name,members:(members||[]).join(", ")})))+showTable("Regions",Object.entries(blocs.regions||{}).map(([name,members])=>({name,members?(members||[]).join(", "):"Global"})));
+    if($("recessionIndicators")) $("recessionIndicators").innerHTML=showTable("Indicators",Object.entries(recession.indicators||{}).map(([name,code])=>({indicator:name,source_code:code})));
+    if($("intelligenceProviders")) $("intelligenceProviders").innerHTML=showTable("Providers",(providers.providers||[]).map(x=>({provider:x.name,category:x.category,access:x.access,priority:x.priority})));
+    if($("intelligenceMetrics")) $("intelligenceMetrics").innerHTML=showTable("50 Investment Metrics",(metrics.metrics||[]).map(x=>({id:x.ID,metric:x.Metric,category:x.Category,definition:x.Definition})));
+    setStatus("Financial intelligence workspace connected","good");
+  }catch(e){setStatus("Financial intelligence workspace unavailable","warn");}
+}
+async function runRiskAnalytics(){
+  try{
+    const prices=($("riskPrices").value||"").split(",").map(Number).filter(Number.isFinite);
+    const r=await fetch(API_BASE+"/api/v1/production/intelligence/risk",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prices})});
+    const d=await r.json(); if(!r.ok) throw Error(d.detail||"Risk analysis failed");
+    $("riskOutput").innerHTML=showTable("Risk Summary",Object.entries(d.risk_summary||{}).map(([metric,value])=>({metric,value})));
+  }catch(e){$("riskOutput").innerHTML="<p class='status warn'>"+esc(e.message)+"</p>";}
+}
 async function loadProductionCapabilities(){
   try{
     const [scripts,sources,models]=await Promise.all([
