@@ -7,6 +7,7 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from globalblocs.api.finance_routes import router as finance_router
+from globalblocs.api.production_routes import router as production_router
 
 app = FastAPI(
     title="GlobalBLOCS Financial Intelligence API",
@@ -15,6 +16,7 @@ app = FastAPI(
 )
 
 app.include_router(finance_router)
+app.include_router(production_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,7 +28,7 @@ app.add_middleware(
 
 DOMAINS = [
     {"id": "economic-cycle", "name": "Economic Cycle", "status": "ready"},
-    {"id": "corporate-health", "name": "Corporate Financial Health", "status": "planned"},
+    {"id": "corporate-health", "name": "Corporate Financial Health", "status": "ready"},
     {"id": "banking", "name": "Banking System", "status": "planned"},
     {"id": "institutional-investors", "name": "Institutional Investment", "status": "planned"},
     {"id": "credit", "name": "Credit Markets", "status": "planned"},
