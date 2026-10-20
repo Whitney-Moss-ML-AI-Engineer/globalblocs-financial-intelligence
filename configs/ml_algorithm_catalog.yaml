@@ -1,0 +1,29 @@
+version: "1.0"
+purpose: "Versioned catalog of classical machine-learning methods for GlobalBLOCS research"
+governance:
+  time_series_split: chronological
+  require_baseline: true
+  require_data_lineage: true
+  prohibit_lookahead_bias: true
+  investment_outputs_are_research_leads: true
+algorithms:
+  - {id: naive_bayes, name: Naive Bayes, family: supervised, task: classification, evaluation: [precision, recall, f1, roc_auc, pr_auc, calibration]}
+  - {id: logistic_regression, name: Logistic Regression, family: supervised, task: classification, evaluation: [precision, recall, f1, roc_auc, pr_auc, calibration]}
+  - {id: knn_classifier, name: K-Nearest Neighbors, family: supervised, task: classification, assumptions: [meaningful_distance_metric, feature_scaling], evaluation: [precision, recall, f1, roc_auc]}
+  - {id: random_forest_classifier, name: Random Forest Classifier, family: supervised, task: classification, evaluation: [precision, recall, f1, roc_auc, feature_importance_stability]}
+  - {id: svm_classifier, name: Support Vector Machine, family: supervised, task: classification, assumptions: [appropriate_kernel, feature_scaling], evaluation: [precision, recall, f1, roc_auc]}
+  - {id: decision_tree_classifier, name: Decision Tree Classifier, family: supervised, task: classification, evaluation: [precision, recall, f1, roc_auc]}
+  - {id: random_forest_regressor, name: Random Forest Regressor, family: supervised, task: regression, evaluation: [mae, rmse, r_squared, residual_diagnostics]}
+  - {id: svr, name: Support Vector Regression, family: supervised, task: regression, assumptions: [feature_scaling, kernel_and_epsilon_selection], evaluation: [mae, rmse, r_squared]}
+  - {id: decision_tree_regressor, name: Decision Tree Regressor, family: supervised, task: regression, evaluation: [mae, rmse, r_squared, residual_diagnostics]}
+  - {id: simple_linear_regression, name: Simple Linear Regression, family: supervised, task: regression, evaluation: [mae, rmse, r_squared, residual_diagnostics]}
+  - {id: multiple_linear_regression, name: Multiple Linear Regression, family: supervised, task: regression, evaluation: [mae, rmse, r_squared, residual_diagnostics, multicollinearity]}
+  - {id: lasso_regression, name: Lasso Regression, family: supervised, task: regression, evaluation: [mae, rmse, r_squared, coefficient_stability]}
+  - {id: kmeans, name: K-Means, family: unsupervised, task: clustering, evaluation: [silhouette, cluster_stability, economic_interpretability]}
+  - {id: dbscan, name: DBSCAN, family: unsupervised, task: clustering, evaluation: [cluster_stability, noise_fraction, economic_interpretability]}
+  - {id: pca, name: Principal Component Analysis, family: unsupervised, task: dimensionality_reduction, evaluation: [explained_variance, reconstruction_error, downstream_validation]}
+  - {id: ica, name: Independent Component Analysis, family: unsupervised, task: source_separation, evaluation: [independence_diagnostics, stability]}
+  - {id: fp_growth, name: FP-Growth, family: association_rules, task: frequent_itemsets, evaluation: [support, confidence, lift]}
+  - {id: apriori, name: Apriori, family: association_rules, task: frequent_itemsets, evaluation: [support, confidence, lift]}
+  - {id: z_score, name: Z-Score, family: anomaly_detection, task: anomaly_detection, evaluation: [precision_at_k, false_positive_rate, review_cost]}
+  - {id: isolation_forest, name: Isolation Forest, family: anomaly_detection, task: anomaly_detection, evaluation: [precision_at_k, false_positive_rate, review_cost]}
