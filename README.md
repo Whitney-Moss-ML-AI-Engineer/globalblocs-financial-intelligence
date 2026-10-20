@@ -124,3 +124,14 @@ A research package now defines 20 proposed macro-financial and firm-level hypoth
 - `research/r/eda_profile.R` — R EDA and unit-root diagnostics
 
 These are starter scripts and research specifications, not evidence that all 20 hypotheses have been estimated. IMF and BIS require dataset-specific SDMX dataflow/dimension discovery; connectors should not guess universal series keys. Keep API credentials in environment variables, retain source/vintage lineage, and do not interpret association as causation without a defensible identification strategy. Run the scripts locally and validate outputs before relying on results.
+
+
+## Global Pension Funds Research Dataset
+
+- ETL guide: `docs/14_research/GLOBAL_PENSION_FUNDS_ETL.md`
+- Python collector: `research/python/top300_pension_funds_etl.py`
+- Dependencies: `research/python/requirements-pension-etl.txt`
+- Database migration: `database/migrations/003_pension_funds.sql`
+- Unit tests: `tests/test_pension_funds_etl.py`
+
+The collector discovers public HTML tables and linked PDFs, preserves source URLs and content hashes, and writes CSV/JSONL plus a source audit log. It is an extensible starter, not a verified claim that 300 funds have already been collected. Currency conversion is intentionally not guessed; source records require review and annual ranking snapshots should be retained.
