@@ -110,3 +110,17 @@ Global cross-validation sources include WFE exchange statistics, BIS financial s
 The starter exposes `GET /api/v1/rag/health`, `POST /api/v1/rag/query`, and `POST /api/v1/rag/refresh`. The first implementation uses repository-local TF-IDF retrieval and returns source-linked evidence. Optional local Ollama generation can be enabled with GLOBALBLOCS_OLLAMA_URL and GLOBALBLOCS_OLLAMA_MODEL; semantic embeddings/vector search are not configured. Protect the refresh endpoint with administrator authentication before deployment. Desktop and mobile client architecture is documented in `docs/08_architecture/CLIENT_APPLICATION_ARCHITECTURE.md`, and algorithm-to-investment research mappings are in `docs/13_rag/ML_ALGORITHMS_TO_INVESTMENT_RESEARCH.md`.
 
 Investment research must use point-in-time data, chronological validation, baseline comparisons, realistic costs, and human review. yfinance is a convenience market-data adapter, not a substitute for official filings or licensed exchange data.
+
+
+## Research-Grade Econometric Hypothesis Workbench
+
+A research package now defines 20 proposed macro-financial and firm-level hypotheses, including regression equations, estimator choices, identification threats, controls, robustness checks, and dissertation methodology scaffolding.
+
+- `docs/14_research/RESEARCH_GRADE_HYPOTHESIS_WORKBENCH.md` — methodology and 20 detailed test plans
+- `configs/research_hypotheses.yaml` — machine-readable hypothesis registry
+- `research/python/etl_official_sources.py` — starter ETL for World Bank WDI and FRED
+- `research/python/eda_profile.py` — descriptive profile, missingness, correlation, plots, ADF/KPSS diagnostics
+- `research/r/etl_official_sources.R` — R starter ETL for WDI and FRED
+- `research/r/eda_profile.R` — R EDA and unit-root diagnostics
+
+These are starter scripts and research specifications, not evidence that all 20 hypotheses have been estimated. IMF and BIS require dataset-specific SDMX dataflow/dimension discovery; connectors should not guess universal series keys. Keep API credentials in environment variables, retain source/vintage lineage, and do not interpret association as causation without a defensible identification strategy. Run the scripts locally and validate outputs before relying on results.
