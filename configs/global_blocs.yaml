@@ -1,0 +1,30 @@
+version: "1.0"
+purpose: "Configurable analytical coverage groups; memberships are many-to-many and time-aware"
+note: "These 25 groups are analytical regions/market blocs, not a claim that all are formal political or trade agreements."
+blocs:
+  - {id: north_america, name: North America, members: [US, CA]}
+  - {id: european_union, name: European Union, members: [AT, BE, BG, HR, CY, CZ, DK, EE, FI, FR, DE, GR, HU, IE, IT, LV, LT, LU, MT, NL, PL, PT, RO, SK, SI, ES, SE]}
+  - {id: uk_ireland, name: United Kingdom and Ireland, members: [GB, IE]}
+  - {id: china, name: China, members: [CN]}
+  - {id: japan, name: Japan, members: [JP]}
+  - {id: india, name: India, members: [IN]}
+  - {id: asean, name: ASEAN, members: [BN, KH, ID, LA, MY, MM, PH, SG, TH, VN]}
+  - {id: australia_new_zealand, name: Australia and New Zealand, members: [AU, NZ]}
+  - {id: latin_america, name: Latin America, members: [AR, BO, BR, CL, CO, CR, EC, MX, PA, PE, PY, UY]}
+  - {id: sub_saharan_africa, name: Sub-Saharan Africa, members: [AO, BW, CI, GH, KE, MU, MZ, NA, NG, RW, SN, TZ, UG, ZA, ZM, ZW]}
+  - {id: middle_east_gcc, name: Middle East and GCC, members: [BH, KW, OM, QA, SA, AE, IL, JO]}
+  - {id: south_korea, name: South Korea, members: [KR]}
+  - {id: russia_cis, name: Russia and CIS, members: [RU, AM, AZ, BY, KZ, KG, MD, TJ, TM, UZ]}
+  - {id: brazil, name: Brazil, members: [BR]}
+  - {id: mexico, name: Mexico, members: [MX]}
+  - {id: south_africa, name: South Africa, members: [ZA]}
+  - {id: turkey, name: Türkiye, members: [TR]}
+  - {id: switzerland, name: Switzerland, members: [CH]}
+  - {id: nordic_countries, name: Nordic Countries, members: [DK, FI, IS, NO, SE]}
+  - {id: singapore, name: Singapore, members: [SG]}
+  - {id: indonesia, name: Indonesia, members: [ID]}
+  - {id: malaysia, name: Malaysia, members: [MY]}
+  - {id: hong_kong, name: Hong Kong, members: [HK]}
+  - {id: taiwan, name: Taiwan, members: [TW]}
+  - {id: global_multilateral, name: Global and Multilateral Markets, members: [GLOBAL]}
+membership_fields: [bloc_id, jurisdiction_id, effective_from, effective_to, membership_source, verified_at]
