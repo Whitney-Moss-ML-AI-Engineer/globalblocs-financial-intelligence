@@ -1,0 +1,7 @@
+requests>=2.31
+beautifulsoup4>=4.12
+pandas>=2.1
+lxml>=5.0
+# Optional PDF table parsers (install one or both if source reports are PDFs):
+pdfplumber>=0.11
+# camelot-py may require additional system dependencies; see its documentation.
