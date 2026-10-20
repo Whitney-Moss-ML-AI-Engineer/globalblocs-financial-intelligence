@@ -55,7 +55,7 @@ class RepositoryRetriever:
                 text = path.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 continue
-            words = re.findall(r"\\S+", text)
+            words = re.findall(r"\S+", text)
             if not words:
                 continue
             relative = path.relative_to(self.root).as_posix()
