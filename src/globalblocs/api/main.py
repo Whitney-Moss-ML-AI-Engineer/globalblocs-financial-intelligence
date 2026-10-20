@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from globalblocs.api.finance_routes import router as finance_router
 from globalblocs.api.production_routes import router as production_router
+from globalblocs.api.rag_routes import router as rag_router
 
 app = FastAPI(
     title="GlobalBLOCS Financial Intelligence API",
@@ -20,6 +21,7 @@ app = FastAPI(
 
 app.include_router(finance_router)
 app.include_router(production_router)
+app.include_router(rag_router)
 
 # Serve the production dashboard from the same FastAPI origin. This keeps the
 # dashboard and API version-aligned and avoids file:// origin/CORS problems.
