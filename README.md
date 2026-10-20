@@ -97,3 +97,16 @@ GlobalBLOCS now includes a country-institution source model covering stock excha
 The database extension adds jurisdiction, market venue, regulator, classification, sector, trade-observation, market-observation, and sector-observation structures in `database/migrations/002_global_markets_regulatory.sql`.
 
 Global cross-validation sources include WFE exchange statistics, BIS financial statistics, WTO trade statistics, UN Comtrade, IMF, World Bank, OECD, IOSCO and BCBS. National sources remain authoritative where available.
+
+
+## Retrieval-Augmented Generation (RAG) and Client Applications
+
+- RAG architecture and governance: `docs/13_rag/GLOBALBLOCS_RAG_SYSTEM.md`
+- Classical ML algorithm catalog: `configs/ml_algorithm_catalog.yaml`
+- 25 configurable analytical coverage groups: `configs/global_blocs.yaml`
+- Initial repository lexical retriever: `src/globalblocs/rag/retriever.py`
+- RAG API: `src/globalblocs/api/rag_routes.py`
+
+The starter exposes `GET /api/v1/rag/health`, `POST /api/v1/rag/query`, and `POST /api/v1/rag/refresh`. The first implementation uses repository-local TF-IDF retrieval and returns source-linked evidence; it does not yet synthesize answers with an LLM or use a vector database. Protect the refresh endpoint with administrator authentication before deployment. Desktop and mobile client architecture is documented in `docs/08_architecture/CLIENT_APPLICATION_ARCHITECTURE.md`.
+
+Investment research must use point-in-time data, chronological validation, baseline comparisons, realistic costs, and human review. yfinance is a convenience market-data adapter, not a substitute for official filings or licensed exchange data.
