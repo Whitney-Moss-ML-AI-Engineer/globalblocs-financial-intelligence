@@ -1,10 +1,12 @@
 import importlib.util
+import sys
 from pathlib import Path
 
 MODULE_PATH = Path(__file__).parents[1] / "research" / "python" / "top300_pension_funds_etl.py"
 spec = importlib.util.spec_from_file_location("pension_etl", MODULE_PATH)
 module = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
+sys.modules[spec.name] = module
 spec.loader.exec_module(module)
 
 
