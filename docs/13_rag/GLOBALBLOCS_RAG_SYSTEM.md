@@ -90,4 +90,4 @@ Each answer should include answer text and limitations; citations with source ID
 7. Evaluation harness, access controls, monitoring, signed releases.
 
 ## Current implementation boundary
-The initial repository milestone should deliver source/data contracts, retrieval API, and UI integration seams. Clearly label demo or lexical retrieval; do not imply a production LLM/vector database is active until configured and tested.
+The initial repository milestone includes source/data contracts, a TF-IDF repository retriever, FastAPI routes, and a dashboard research form. Optional local generation uses Ollama when GLOBALBLOCS_OLLAMA_URL and GLOBALBLOCS_OLLAMA_MODEL are configured. Embedding/vector retrieval, structured live-data retrieval, robust reranking, authentication for administrative routes, and production evaluation remain future work. Do not describe the starter as a fully validated production RAG system until those pieces are configured and tested.
