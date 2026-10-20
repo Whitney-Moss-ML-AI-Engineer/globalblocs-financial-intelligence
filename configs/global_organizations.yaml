@@ -1,0 +1,42 @@
+version: "1.0"
+purpose: "Time-aware registry of formal global economic/political organizations and analytical forums"
+membership_policy:
+  effective_dates_required: true
+  distinguish_full_member_from_partner_or_invited: true
+  verification_required: true
+  gdp_comparisons_require_year_and_method: true
+organizations:
+  - {id: brics, name: BRICS, type: intergovernmental_coordination_group, official_source_required: true, themes: [development_finance, trade, investment, governance_reform, energy, food_security, technology]}
+  - {id: g7, name: Group of Seven, type: political_economic_forum, themes: [macroeconomic_coordination, financial_stability, security, sanctions, climate, energy]}
+  - {id: g20, name: Group of Twenty, type: international_economic_forum, themes: [global_growth, financial_stability, debt, tax, trade, development]}
+  - {id: oecd, name: Organisation for Economic Co-operation and Development, type: intergovernmental_organization, themes: [statistics, productivity, tax, education, innovation, governance]}
+  - {id: eu, name: European Union, type: political_economic_union, themes: [single_market, customs, competition, regulation, climate, regional_development]}
+  - {id: euro_area, name: Euro Area, type: monetary_union, distinct_from: eu, themes: [monetary_policy, payments, financial_stability]}
+  - {id: asean, name: Association of Southeast Asian Nations, type: regional_organization, themes: [regional_integration, trade, investment]}
+  - {id: au, name: African Union, type: continental_organization, themes: [continental_integration, development, peace_security]}
+  - {id: mercosur, name: MERCOSUR, type: regional_integration_arrangement, themes: [trade, customs, regional_integration]}
+  - {id: apec, name: Asia-Pacific Economic Cooperation, type: economic_cooperation_forum, themes: [trade, investment, regional_cooperation]}
+  - {id: afcfta, name: African Continental Free Trade Area, type: trade_agreement_framework, themes: [intra_african_trade, customs, supply_chains]}
+  - {id: gcc, name: Gulf Cooperation Council, type: regional_organization, themes: [regional_cooperation, trade, energy]}
+  - {id: cptpp, name: Comprehensive and Progressive Agreement for Trans-Pacific Partnership, type: trade_agreement, themes: [trade, investment, rules]}
+  - {id: rcep, name: Regional Comprehensive Economic Partnership, type: trade_agreement, themes: [trade, supply_chains, investment]}
+  - {id: usmca, name: United States-Mexico-Canada Agreement, type: trade_agreement, themes: [north_american_trade, manufacturing, supply_chains]}
+  - {id: eaeu, name: Eurasian Economic Union, type: regional_economic_union, themes: [customs, trade, labor_mobility]}
+  - {id: opec, name: Organization of the Petroleum Exporting Countries, type: commodity_producer_group, themes: [oil_supply, energy_markets]}
+  - {id: imf, name: International Monetary Fund, type: multilateral_financial_institution, themes: [balance_of_payments, financial_stability, macroeconomic_surveillance]}
+  - {id: world_bank_group, name: World Bank Group, type: multilateral_development_institution, themes: [development_finance, poverty, infrastructure]}
+  - {id: wto, name: World Trade Organization, type: multilateral_trade_organization, themes: [trade_rules, trade_statistics, dispute_settlement]}
+  - {id: bis, name: Bank for International Settlements, type: international_financial_cooperation, themes: [banking_statistics, central_banking, financial_stability]}
+  - {id: fsb, name: Financial Stability Board, type: international_financial_coordination_body, themes: [systemic_risk, regulatory_coordination, financial_stability]}
+membership_record_fields: [organization_id, jurisdiction_id, status, effective_from, effective_to, source_url, verified_at, notes]
+comparison_metrics:
+  - {id: gdp_nominal, unit: currency, require_year: true}
+  - {id: gdp_ppp, unit: international_dollar, require_year: true}
+  - {id: gdp_growth, unit: percent, require_year: true}
+  - {id: inflation, unit: percent, require_year: true}
+  - {id: trade_intra_group, unit: currency, require_year: true}
+  - {id: trade_external, unit: currency, require_year: true}
+  - {id: fdi_flows, unit: currency, require_year: true}
+  - {id: employment, unit: persons_or_percent, require_year: true}
+  - {id: productivity, unit: source_defined, require_year: true}
+  - {id: public_debt_gdp, unit: percent, require_year: true}
