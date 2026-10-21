@@ -1,0 +1,8 @@
+requests>=2.31,<3
+beautifulsoup4>=4.12,<5
+PyYAML>=6.0,<7
+# Optional dynamic-page adapters (install only when a source requires them):
+# scrapy>=2.11,<3
+# selenium>=4.20,<5
+# pyppeteer>=2.0,<3
+# pandas>=2.2,<4
