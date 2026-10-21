@@ -1,0 +1,130 @@
+# Public source registry. These URLs are starting points, not guaranteed machine-readable APIs.
+# The collector records source evidence and links; it does not assert that page text is verified data.
+schema_version: "1.0"
+sources:
+  - source_id: atlantic_council_cbdc_tracker
+    name: Atlantic Council CBDC Tracker
+    source_type: tracker
+    url: https://www.atlanticcouncil.org/cbdctracker/
+    enabled: true
+    priority: high
+    expected_topics: [country, cbdc_status, retail_wholesale, project_links]
+  - source_id: cbdc_tracker_org
+    name: CBDCTracker.org
+    source_type: tracker
+    url: https://cbdctracker.org/
+    enabled: true
+    priority: medium
+    expected_topics: [country, cbdc_name, status, project_links]
+  - source_id: bis_cbdc
+    name: Bank for International Settlements CBDC research
+    source_type: international_organization
+    url: https://www.bis.org/topic/cbdc.htm
+    enabled: true
+    priority: high
+    expected_topics: [survey, retail_wholesale, interoperability]
+  - source_id: imf_cbdc
+    name: International Monetary Fund CBDC resources
+    source_type: international_organization
+    url: https://www.imf.org/en/Topics/fintech/central-bank-digital-currency
+    enabled: true
+    priority: high
+    expected_topics: [policy, legal, macro_financial]
+  - source_id: federal_register_executive_orders
+    name: Federal Register Executive Orders
+    source_type: us_regulatory
+    url: https://www.federalregister.gov/presidential-documents/executive-orders
+    enabled: true
+    priority: high
+    expected_topics: [executive_order, payments, digital_assets, sanctions]
+  - source_id: federal_register_api
+    name: Federal Register API documentation
+    source_type: us_regulatory_api
+    url: https://www.federalregister.gov/developers/documentation/api/v1
+    enabled: true
+    priority: high
+    expected_topics: [api, executive_order, agency_rules]
+  - source_id: ofac_sanctions
+    name: U.S. Treasury OFAC sanctions programs and information
+    source_type: us_sanctions
+    url: https://ofac.treasury.gov/
+    enabled: true
+    priority: high
+    expected_topics: [sanctions_program, sdns, sanctions_lists]
+  - source_id: ofac_sdn_list
+    name: OFAC Sanctions List Service
+    source_type: us_sanctions_data
+    url: https://ofac.treasury.gov/sanctions-list-service
+    enabled: true
+    priority: high
+    expected_topics: [sanctions_list_downloads, list_versions]
+  - source_id: congress_gov_api
+    name: Congress.gov API documentation
+    source_type: us_legislation_api
+    url: https://api.congress.gov/
+    enabled: true
+    priority: high
+    expected_topics: [bill, statute, hearing, committee]
+  - source_id: npcI_upi
+    name: National Payments Corporation of India UPI
+    source_type: payment_rail
+    url: https://www.npci.org.in/product/upi
+    enabled: true
+    priority: high
+    expected_topics: [upi, retail_payments, product]
+  - source_id: npci_statistics
+    name: National Payments Corporation of India statistics
+    source_type: payment_statistics
+    url: https://www.npci.org.in/what-we-do/upi/product-statistics
+    enabled: true
+    priority: high
+    expected_topics: [monthly_volume, transaction_value]
+  - source_id: swift
+    name: SWIFT
+    source_type: payment_messaging_network
+    url: https://www.swift.com/
+    enabled: true
+    priority: high
+    expected_topics: [messaging, iso20022, cross_border]
+  - source_id: cips
+    name: Cross-Border Interbank Payment System
+    source_type: payment_settlement_network
+    url: https://www.cips.com.cn/en/
+    enabled: true
+    priority: high
+    expected_topics: [rmb_clearing, settlement, participants]
+  - source_id: bank_of_russia_spfs
+    name: Bank of Russia Financial Messaging System
+    source_type: payment_messaging_network
+    url: https://www.cbr.ru/eng/
+    enabled: true
+    priority: medium
+    expected_topics: [spfs, financial_messaging]
+  - source_id: project_mbridge
+    name: BIS Innovation Hub Project mBridge
+    source_type: cross_border_cbdc_project
+    url: https://www.bis.org/about/bisih/topics/cbdc/mcbdc_bridge.htm
+    enabled: true
+    priority: high
+    expected_topics: [wholesale_cbdc, cross_border, interoperability]
+  - source_id: project_inextex
+    name: INSTEX historical reference
+    source_type: historical_payment_mechanism
+    url: https://www.eeas.europa.eu/
+    enabled: true
+    priority: low
+    expected_topics: [instex, iran, humanitarian_trade]
+  - source_id: rbi_cbdc
+    name: Reserve Bank of India
+    source_type: central_bank
+    url: https://www.rbi.org.in/
+    enabled: true
+    priority: high
+    expected_topics: [digital_rupee, cbdc]
+  - source_id: pbc
+    name: People's Bank of China
+    source_type: central_bank
+    url: http://www.pbc.gov.cn/en/
+    enabled: true
+    priority: high
+    expected_topics: [e_cny, cbdc, cross_border]
