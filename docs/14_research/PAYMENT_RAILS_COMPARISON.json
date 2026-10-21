@@ -1,0 +1,184 @@
+{
+  "schema_version": "1.0",
+  "as_of_date": null,
+  "records": [
+    {
+      "rail_id": "swift",
+      "name": "SWIFT",
+      "country_scope": "international",
+      "category": "financial_messaging",
+      "operator": "SWIFT",
+      "currency_scope": "multi_currency",
+      "settlement_role": "messaging_not_settlement",
+      "cbdc_interoperability": "research_and_interoperability_work_requires_current_source_verification",
+      "operational_status": "active",
+      "sanctions_exposure_factors": [
+        "member_jurisdiction",
+        "correspondent_banks",
+        "currency_clearing",
+        "counterparty",
+        "applicable_law"
+      ],
+      "source_url": "https://www.swift.com/"
+    },
+    {
+      "rail_id": "cips",
+      "name": "Cross-Border Interbank Payment System",
+      "country_scope": "China-centered international",
+      "category": "clearing_and_settlement_with_messaging",
+      "operator": "CIPS Co., Ltd.",
+      "currency_scope": "RMB",
+      "settlement_role": "clearing_and_settlement_capabilities",
+      "cbdc_interoperability": "do_not_assume_production_cbdc_bridge_without_primary_evidence",
+      "operational_status": "active_status_to_be_refreshed",
+      "sanctions_exposure_factors": [
+        "participants",
+        "currency",
+        "correspondent_path",
+        "counterparty",
+        "applicable_law"
+      ],
+      "source_url": "https://www.cips.com.cn/en/"
+    },
+    {
+      "rail_id": "spfs",
+      "name": "Bank of Russia Financial Messaging System (SPFS)",
+      "country_scope": "Russia-centered",
+      "category": "financial_messaging",
+      "operator": "Bank of Russia",
+      "currency_scope": "not_limited_to_a_single_settlement_asset_by_messaging_function",
+      "settlement_role": "messaging_not_universal_settlement",
+      "operational_status": "current_status_to_be_refreshed",
+      "sanctions_exposure_factors": [
+        "russian_nexus",
+        "participant",
+        "currency",
+        "correspondent_path",
+        "applicable_law"
+      ],
+      "source_url": "https://www.cbr.ru/eng/"
+    },
+    {
+      "rail_id": "mbridge",
+      "name": "Project mBridge",
+      "country_scope": "participating jurisdictions",
+      "category": "wholesale_multi_cbdc_project",
+      "operator": "BIS Innovation Hub and participating authorities as applicable to each project phase",
+      "currency_scope": "participating jurisdictions",
+      "settlement_role": "cross_border_wholesale_settlement_project",
+      "operational_status": "phase_and_participation_must_be_verified",
+      "sanctions_exposure_factors": [
+        "participating_authority",
+        "currency",
+        "counterparty",
+        "project_rules",
+        "applicable_law"
+      ],
+      "source_url": "https://www.bis.org/about/bisih/topics/cbdc/mcbdc_bridge.htm"
+    },
+    {
+      "rail_id": "instex",
+      "name": "INSTEX",
+      "country_scope": "historical Europe-Iran trade mechanism",
+      "category": "historical_trade_clearing_spv",
+      "operator": "E3-established entity",
+      "currency_scope": "not_a_standalone_payment_currency",
+      "settlement_role": "mirror-account clearing concept",
+      "operational_status": "historical_defunct",
+      "sanctions_exposure_factors": [
+        "historical_case_only"
+      ],
+      "source_url": "https://www.eeas.europa.eu/"
+    },
+    {
+      "rail_id": "upi",
+      "name": "Unified Payments Interface",
+      "country_scope": "India and documented partner corridors",
+      "category": "instant_retail_payment_rail",
+      "operator": "National Payments Corporation of India",
+      "currency_scope": "INR domestic; cross-border use depends on specific integration",
+      "settlement_role": "retail_payment_routing_with_underlying_bank/payment arrangements",
+      "operational_status": "active_status_to_be_refreshed",
+      "sanctions_exposure_factors": [
+        "partner_corridor",
+        "participating_psp",
+        "currency",
+        "underlying_settlement",
+        "applicable_law"
+      ],
+      "source_url": "https://www.npci.org.in/product/upi"
+    },
+    {
+      "rail_id": "fedwire_funds",
+      "name": "Fedwire Funds Service",
+      "country_scope": "United States",
+      "category": "wholesale_funds_transfer",
+      "operator": "Federal Reserve Banks",
+      "currency_scope": "USD",
+      "settlement_role": "real_time_gross_settlement",
+      "operational_status": "active_status_to_be_refreshed",
+      "sanctions_exposure_factors": [
+        "usd_transaction",
+        "parties",
+        "banks",
+        "applicable_law"
+      ],
+      "source_url": "https://www.frbservices.org/financial-services/wires"
+    },
+    {
+      "rail_id": "chips",
+      "name": "CHIPS",
+      "country_scope": "United States and international USD clearing",
+      "category": "private_sector_usd_clearing_and_settlement",
+      "operator": "The Clearing House",
+      "currency_scope": "USD",
+      "settlement_role": "clearing_and_settlement",
+      "operational_status": "active_status_to_be_refreshed",
+      "sanctions_exposure_factors": [
+        "usd_transaction",
+        "participants",
+        "parties",
+        "applicable_law"
+      ],
+      "source_url": "https://www.theclearinghouse.org/payment-systems/chips"
+    },
+    {
+      "rail_id": "federal_register",
+      "name": "Federal Register",
+      "country_scope": "United States",
+      "category": "regulatory_source",
+      "operator": "U.S. Government Publishing Office / Office of the Federal Register",
+      "currency_scope": null,
+      "settlement_role": null,
+      "operational_status": "active",
+      "source_url": "https://www.federalregister.gov/developers/documentation/api/v1"
+    },
+    {
+      "rail_id": "ofac",
+      "name": "OFAC Sanctions List Service",
+      "country_scope": "United States and applicable U.S. sanctions nexus",
+      "category": "sanctions_data_source",
+      "operator": "U.S. Department of the Treasury",
+      "currency_scope": null,
+      "settlement_role": null,
+      "operational_status": "active",
+      "source_url": "https://ofac.treasury.gov/sanctions-list-service"
+    },
+    {
+      "rail_id": "congress_gov",
+      "name": "Congress.gov API",
+      "country_scope": "United States",
+      "category": "legislative_source",
+      "operator": "Library of Congress",
+      "currency_scope": null,
+      "settlement_role": null,
+      "operational_status": "active",
+      "source_url": "https://api.congress.gov/"
+    }
+  ],
+  "notes": [
+    "Taxonomy entries are not legal opinions or verified real-time status claims.",
+    "Risk is transaction-scenario-specific; do not infer sanctions immunity from the rail.",
+    "Refresh primary-source evidence and record source hashes before relying on the data."
+  ]
+}\n
