@@ -135,3 +135,15 @@ These are starter scripts and research specifications, not evidence that all 20 
 - Unit tests: `tests/test_pension_funds_etl.py`
 
 The collector discovers public HTML tables and linked PDFs, preserves source URLs and content hashes, and writes CSV/JSONL plus a source audit log. It is an extensible starter, not a verified claim that 300 funds have already been collected. Currency conversion is intentionally not guessed; source records require review and annual ranking snapshots should be retained.
+
+
+## CBDC, Payment Rails, and Regulatory Intelligence ETL
+
+- Source registry: `configs/payments_cbdc_sources.yaml`
+- Python collector: `research/python/payments_cbdc_etl.py`
+- Dependencies: `research/python/requirements-payments-etl.txt`
+- ETL design, risk framework, and scraping notes: `docs/14_research/PAYMENTS_CBDC_ETL.md`
+- Machine-readable rail taxonomy: `docs/14_research/PAYMENT_RAILS_COMPARISON.json`
+- Unit tests: `tests/test_payments_cbdc_etl.py`
+
+The collector captures public source observations, HTML tables, discovered links, source hashes, retrieval timestamps, HTTP metadata, CSV/JSONL outputs, and an optional SQLite store. It is an initial generic collector, not yet a verified full crawl of every CBDC jurisdiction or a source-specific Federal Register/OFAC/Congress.gov API ingestion. See the ETL guide for the implementation boundary and next production steps. The sanctions model is a compliance-review screening framework, not legal advice or a sanctions-evasion tool.
