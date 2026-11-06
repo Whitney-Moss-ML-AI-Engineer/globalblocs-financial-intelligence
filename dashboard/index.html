@@ -31,7 +31,14 @@
 <div id="energyUniverseStatus" class="status">Loading company universe…</div><div id="energyCompanies" style="margin-top:10px"></div></div>
 <div class="card" style="margin-top:12px"><h3>SEC company financial intelligence</h3><p class="note">Retrieve annual reported financial facts from SEC EDGAR. Select a company ticker, then load its filing-backed observations. Configure SEC_USER_AGENT on the API server.</p>
 <div class="energy-toolbar"><div class="energy-filter"><label for="energySecTicker">Company ticker</label><input id="energySecTicker" value="XOM" maxlength="12"></div><button class="button primary" id="energyLoadSec">Load SEC financial facts</button></div>
-<div id="energySecStatus" class="status">SEC company facts are not loaded yet.</div><div id="energySecCompany" class="note"></div><div id="energySecFinancials" style="margin-top:10px"></div><h4 style="margin-top:16px">Derived operating &amp; financial ratios</h4><div id="energySecAnalytics" style="margin-top:10px"><p class="note">Derived metrics load with SEC financial facts.</p></div><div id="energySecSources" class="note"></div></div>
+<div id="energySecStatus" class="status">SEC company facts are not loaded yet.</div><div id="energySecCompany" class="note"></div><div id="energySecFinancials" style="margin-top:10px"></div><h4 style="margin-top:16px">Derived operating &amp; financial ratios</h4>
+<div class="peer-comparison" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border,#ddd)">
+<h4>Peer company comparison</h4>
+<p class="note">Compare up to five issuers using annual SEC-derived metrics. Fiscal year-ends may differ; check the period shown for each issuer.</p>
+<div class="energy-toolbar"><div class="energy-filter" style="min-width:260px;flex:1"><label for="energyPeerTickers">Issuer tickers (comma-separated, max 5)</label><input id="energyPeerTickers" value="XOM,CVX,COP,KMI,EPD" maxlength="80"></div><button class="button primary" id="energyComparePeers">Compare companies</button></div>
+<div id="energyPeerStatus" class="status">Enter up to five tickers and run a peer comparison.</div>
+<div id="energyPeerResults" style="margin-top:10px"></div>
+</div><div id="energySecAnalytics" style="margin-top:10px"><p class="note">Derived metrics load with SEC financial facts.</p></div><div id="energySecSources" class="note"></div></div>
 <div class="grid energy-grid" style="margin-top:12px">
 <div class="card"><h3>EIA official data query</h3><p class="note">Configure EIA_API_KEY on the API server. Select a dataset, then supply valid EIA facet parameters from its current category metadata. The API key never enters browser code.</p>
 <label for="energyEiaDataset">Dataset</label><select id="energyEiaDataset"><option>Loading catalog…</option></select>
