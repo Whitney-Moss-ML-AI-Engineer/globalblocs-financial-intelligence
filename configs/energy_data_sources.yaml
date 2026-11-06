@@ -1,0 +1,52 @@
+project: GlobalBLOCS
+domain: energy_intelligence
+registry_version: "1.0"
+lineage_required: true
+preserve_source_variables: true
+data_policy:
+  market_data: "yfinance is a research adapter, not an exchange-licensed real-time feed; review terms before commercial use."
+  official_data: "Prefer EIA, FERC, PHMSA, SEC and CFTC primary sources."
+  observations: "Never fabricate prices, financials, operating statistics or incidents."
+  credentials: "Store EIA_API_KEY server-side; never expose it to browser clients."
+sources:
+  - {id: eia, provider: "U.S. Energy Information Administration", access: "free_api_key", url: "https://www.eia.gov/opendata/", datasets: [petroleum_spot_prices, petroleum_stocks, petroleum_production, natural_gas_prices, natural_gas_storage, lng_exports, electricity]}
+  - {id: sec_edgar, provider: "U.S. Securities and Exchange Commission", access: "public_api", url: "https://data.sec.gov/", datasets: [company_submissions, companyfacts, 10-K, 10-Q, 8-K]}
+  - {id: phmsa, provider: "Pipeline and Hazardous Materials Safety Administration", access: "public_download", url: "https://www.phmsa.dot.gov/data-and-statistics/pipeline/data-and-statistics-overview", datasets: [pipeline_incidents, operator_statistics, mileage, safety_performance]}
+  - {id: ferc, provider: "Federal Energy Regulatory Commission", access: "public_data_catalog", url: "https://data.ferc.gov/datacatalog/", datasets: [form_2, form_6, form_60, pipeline_rates, utility_filings]}
+  - {id: cftc, provider: "Commodity Futures Trading Commission", access: "public_download", url: "https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm", datasets: [commitments_of_traders]}
+  - {id: yfinance, provider: "Yahoo Finance via yfinance", access: "third_party_unofficial", url: "https://ranaroussi.github.io/yfinance/", datasets: [historical_prices, volumes, selected_fundamentals]}
+company_segments:
+  integrated: [XOM, CVX]
+  upstream: [COP, OXY, DVN, EOG, FANG]
+  services: [HAL, SLB, BKR, WFRD, NBR, HP, PTEN, VAL, RIG, LBRT]
+  midstream: [KMI, EPD, ET, OKE, ENB, WMB, TRGP, PAA, TRP, DTM]
+  refining: [PSX, MPC, VLO, DINO, PBF, CVI, DK, PARR]
+  gas_utility: [SR, ATO, OGS, NI, SWX, UGI, CPK, NFG]
+  electric_utility: [AEE, SO, D, ETR]
+analytics:
+  upstream: [production_growth, proved_reserves, reserve_replacement, lifting_cost, realized_price, hedge_coverage]
+  midstream: [throughput, capacity_utilization, fee_based_revenue, distributable_cash_flow, debt_to_ebitda]
+  refining: [refinery_utilization, crack_spreads, throughput, gross_refining_margin]
+  gas_utility: [rate_base, allowed_roe, customer_growth, weather_normalized_volume, capital_expenditure]
+  electric_utility: [generation_mix, gas_fuel_exposure, load_growth, allowed_roe, rate_base]
+  cross_sector: [revenue_growth, ebitda, free_cash_flow, net_debt, interest_coverage, dividend_payout, ev_to_ebitda, roic]
+
+# Source registry extension for infrastructure intelligence
+infrastructure:
+  phmsa:
+    public_sources:
+      - pipeline_incidents
+      - pipeline_mileage
+      - operator_directory
+      - lng_facilities
+      - flagged_incidents
+    restricted_sources:
+      - npms_detailed_pipeline_gis
+    policy: "Use public summaries only. Detailed NPMS GIS is restricted; do not mirror protected critical-infrastructure geometry."
+  ferc:
+    access: "api_key_required"
+    api_key_env: FERC_API_KEY
+    endpoints:
+      assets: "https://api.ferc.gov/v1/data-assets/"
+      dataset_details: "https://api.ferc.gov/v1/dataset/{dataset_id}/details/"
+    policy: "Discover dataset IDs dynamically; do not hard-code IDs. FERC data API does not guarantee filtered subsets for every dataset."
