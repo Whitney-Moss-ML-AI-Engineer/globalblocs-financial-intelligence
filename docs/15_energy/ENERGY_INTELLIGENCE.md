@@ -65,6 +65,23 @@ python scripts/energy/import_phmsa_incidents.py \
 
 Before running it, copy/edit the mapping template to match the exact source headers and data dictionary for the downloaded PHMSA release. The importer validates mapped columns, parses selected date/numeric fields, preserves every original row as `raw_record`, and emits normalized JSON Lines. It does not assume that field names are identical across gas, liquid, LNG or historical files. The JSONL output is a staging artifact; database loading and source-release-specific validation remain separate steps.
 
+## SEC-derived company financial analytics
+
+The API exposes `GET /api/v1/energy/analytics/company/{ticker}`, which derives annual ratios from the issuer's SEC Company Facts observations. The dashboard requests this endpoint alongside the SEC fact table.
+
+Calculated metrics include revenue growth, operating margin, net margin, free cash flow, free-cash-flow margin, operating-cash-flow/net-income cash conversion, return on assets, return on equity, long-term debt/assets, long-term debt/equity, net debt (only when both long-term debt and cash/equivalents are available), and capital-expenditure intensity.
+
+Definitions and controls:
+- Free cash flow = cash from operations minus the absolute value of reported PP&E acquisition cash outflow.
+- ROA and ROE use period-end assets/equity, not average balances; they are screening ratios, not textbook average-balance returns.
+- Leverage ratios currently use long-term debt concepts; they may omit current maturities and other financing liabilities.
+- Cash conversion is null when net income is zero or unavailable.
+- Revenue growth uses the nearest earlier reported annual period; fiscal year-end dates may differ by issuer.
+- Missing source facts remain null. The service does not impute missing values.
+- EBITDA, ROIC, enterprise value multiples, reserves, production and refinery utilization are not inferred from generic facts. They require further issuer-specific and operating-data ingestion.
+
+The SEC's Company Facts API aggregates standardized taxonomy facts and does not include issuer-specific custom taxonomy tags. Those extensions may be required for comparable energy operating metrics. <https://www.sec.gov/search-filings/edgar-application-programming-interfaces>
+
 ## Data integrity and limitations
 - No synthetic commodity prices or company financials are displayed.
 - yfinance output is labeled historical market data with observation dates and provider disclaimers.
