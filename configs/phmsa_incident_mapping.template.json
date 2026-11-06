@@ -1,0 +1,14 @@
+{
+  "_comment": "Replace every source-column value with the exact header from the PHMSA file and its accompanying data dictionary. Do not assume column names are stable across report types or releases.",
+  "source_record_id": "REPLACE_WITH_UNIQUE_INCIDENT_ID_COLUMN",
+  "report_type": "REPLACE_WITH_REPORT_TYPE_COLUMN",
+  "incident_date": "REPLACE_WITH_INCIDENT_DATE_COLUMN",
+  "operator_name": "REPLACE_WITH_OPERATOR_NAME_COLUMN",
+  "operator_id": "REPLACE_WITH_OPERATOR_ID_COLUMN",
+  "state_code": "REPLACE_WITH_STATE_COLUMN",
+  "commodity": "REPLACE_WITH_COMMODITY_COLUMN",
+  "cause_category": "REPLACE_WITH_CAUSE_COLUMN",
+  "fatalities": "REPLACE_WITH_FATALITIES_COLUMN",
+  "injuries": "REPLACE_WITH_INJURIES_COLUMN",
+  "estimated_property_damage_usd": "REPLACE_WITH_PROPERTY_DAMAGE_COLUMN"
+}
