@@ -31,7 +31,7 @@
 <div id="energyUniverseStatus" class="status">Loading company universe…</div><div id="energyCompanies" style="margin-top:10px"></div></div>
 <div class="card" style="margin-top:12px"><h3>SEC company financial intelligence</h3><p class="note">Retrieve annual reported financial facts from SEC EDGAR. Select a company ticker, then load its filing-backed observations. Configure SEC_USER_AGENT on the API server.</p>
 <div class="energy-toolbar"><div class="energy-filter"><label for="energySecTicker">Company ticker</label><input id="energySecTicker" value="XOM" maxlength="12"></div><button class="button primary" id="energyLoadSec">Load SEC financial facts</button></div>
-<div id="energySecStatus" class="status">SEC company facts are not loaded yet.</div><div id="energySecCompany" class="note"></div><div id="energySecFinancials" style="margin-top:10px"></div><div id="energySecSources" class="note"></div></div>
+<div id="energySecStatus" class="status">SEC company facts are not loaded yet.</div><div id="energySecCompany" class="note"></div><div id="energySecFinancials" style="margin-top:10px"></div><h4 style="margin-top:16px">Derived operating &amp; financial ratios</h4><div id="energySecAnalytics" style="margin-top:10px"><p class="note">Derived metrics load with SEC financial facts.</p></div><div id="energySecSources" class="note"></div></div>
 <div class="grid energy-grid" style="margin-top:12px">
 <div class="card"><h3>EIA official data query</h3><p class="note">Configure EIA_API_KEY on the API server. Select a dataset, then supply valid EIA facet parameters from its current category metadata. The API key never enters browser code.</p>
 <label for="energyEiaDataset">Dataset</label><select id="energyEiaDataset"><option>Loading catalog…</option></select>
