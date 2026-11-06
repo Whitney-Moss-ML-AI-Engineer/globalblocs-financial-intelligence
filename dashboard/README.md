@@ -23,3 +23,6 @@ The dashboard should distinguish observed data, statistical estimates, predictiv
 - See docs/15_energy/ENERGY_INTELLIGENCE.md and docs/15_energy/ENERGY_DATA_MODEL.md.
 
 - SEC issuer financial facts: GET /api/v1/energy/sec/company/{ticker}/facts. Configure SEC_USER_AGENT with an application name and contact email; results are annual filing-backed XBRL facts with period and accession metadata.
+
+- Public PHMSA source registry: GET /api/v1/energy/infrastructure/sources.
+- FERC dataset discovery: GET /api/v1/energy/infrastructure/ferc/assets and GET /api/v1/energy/infrastructure/ferc/datasets/{dataset_id}/details. Configure FERC_API_KEY server-side. The FERC catalog returns provider-managed dataset IDs dynamically.
