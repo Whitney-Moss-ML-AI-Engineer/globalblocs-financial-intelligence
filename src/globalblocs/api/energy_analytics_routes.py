@@ -74,3 +74,30 @@ def company_analytics(ticker:str):
             "limitations":"Annual SEC facts only; standard-tag mapping may omit issuer-specific extensions. Fiscal year ends differ. Ratios are not investment recommendations. EV/EBITDA, ROIC and reserve/production metrics are not calculated in this phase."
         }
     }
+
+@router.get("/compare")
+def compare_companies(tickers: str):
+    """Compare up to five issuers using the same SEC-derived annual metrics."""
+    from fastapi import HTTPException
+
+    requested = [item.strip().upper() for item in tickers.split(",") if item.strip()]
+    normalized = list(dict.fromkeys(requested))
+    if not normalized:
+        raise HTTPException(status_code=400, detail="Provide comma-separated issuer tickers.")
+    if len(normalized) > 5:
+        raise HTTPException(status_code=400, detail="Compare up to five issuers per request.")
+    results = []
+    # Deliberately sequential to avoid bursts against SEC public endpoints.
+    for symbol in normalized:
+        try:
+            results.append({"ticker": symbol, "status": "ok", "data": company_analytics(symbol)})
+        except HTTPException as exc:
+            results.append({"ticker": symbol, "status": "error", "error": exc.detail, "status_code": exc.status_code})
+        except Exception:
+            results.append({"ticker": symbol, "status": "error", "error": "Issuer data could not be retrieved."})
+    return {
+        "provider": "SEC EDGAR Company Facts; GlobalBLOCS derived calculations",
+        "comparison_count": len(results),
+        "results": results,
+        "methodology": "Each issuer uses the same annual SEC fact mapping and ratio formulas as the single-company analytics endpoint. Fiscal year ends may differ; compare matching period ends or fiscal years carefully. Missing values remain null. No composite investment score or recommendation is generated."
+    }
