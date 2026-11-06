@@ -48,6 +48,8 @@ def normalize_row(row:dict[str,str],mapping:dict[str,str],dataset:str,source_fil
 def load_mapping(path:Path)->dict[str,str]:
  mapping=json.loads(path.read_text(encoding="utf-8"))
  if not isinstance(mapping,dict) or not mapping:raise ValueError("Mapping must be a non-empty JSON object.")
+ mapping.pop("_comment",None)
+ if not mapping:raise ValueError("Mapping must contain at least one source-field mapping.")
  unknown=set(mapping)-ALLOWED_FIELDS
  if unknown:raise ValueError("Unsupported normalized fields: "+", ".join(sorted(unknown)))
  if "source_record_id" not in mapping:raise ValueError("Mapping must include source_record_id.")
