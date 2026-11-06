@@ -30,5 +30,5 @@ def test_eia_query_rejects_unknown_dataset():
     assert response.status_code==400
 
 def test_energy_market_data_rejects_more_than_30_symbols():
-    response=client.get("/api/v1/energy/market-data?symbols="+",".join(["A"]*31))
+    response=client.get("/api/v1/energy/market-data?symbols="+",".join([f"S{i}" for i in range(31)]))
     assert response.status_code==400
