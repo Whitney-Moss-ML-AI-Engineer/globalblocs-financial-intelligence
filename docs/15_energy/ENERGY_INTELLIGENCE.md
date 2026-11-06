@@ -90,3 +90,9 @@ The SEC's Company Facts API aggregates standardized taxonomy facts and does not 
 - Company financials and operating metrics should be populated from SEC XBRL/filings and official regulator datasets with source and period lineage.
 - Pipeline and utility infrastructure maps are a later phase; respect PHMSA/FERC access and redistribution terms and avoid exposing sensitive operational details.
 - Investment scores must be segment-specific and remain research signals subject to validation, costs and human review.
+
+### Cross-company SEC comparison
+
+The endpoint `GET /api/v1/energy/analytics/compare?tickers=XOM,CVX,COP` compares up to five unique issuer tickers in one response. It reuses the single-issuer SEC analytics calculations, preserves per-issuer errors so one missing ticker does not discard the other results, and requests issuers sequentially to avoid bursts against SEC public endpoints. Duplicate tickers are removed while preserving request order.
+
+The response intentionally does not rank issuers or create a composite investment score. Compare matching fiscal periods carefully because issuer fiscal year-ends differ. Missing facts remain null; this is a research comparison, not an investment recommendation.
