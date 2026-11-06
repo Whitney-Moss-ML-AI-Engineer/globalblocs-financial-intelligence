@@ -120,6 +120,9 @@ def query_eia(request: EIAQueryRequest):
     if dataset is None: raise HTTPException(400,"Unknown EIA dataset. Retrieve /api/v1/energy/catalog for supported datasets.")
     api_key=os.getenv("EIA_API_KEY")
     if not api_key: raise HTTPException(503,"EIA_API_KEY is not configured server-side. Add it to the server environment; never place it in browser code.")
+    reserved={"api_key","frequency","data[0]","sort[0][column]","sort[0][direction]","offset","length"}
+    if reserved.intersection(request.params):
+        raise HTTPException(400,"Do not override reserved EIA request parameters; supply only dataset facet/filter parameters.")
     params={"api_key":api_key,"frequency":dataset["frequency"],"data[0]":"value","sort[0][column]":"period","sort[0][direction]":"desc","offset":"0","length":str(request.length)}
     params.update(request.params)
     try:
