@@ -26,3 +26,5 @@ The dashboard should distinguish observed data, statistical estimates, predictiv
 
 - Public PHMSA source registry: GET /api/v1/energy/infrastructure/sources.
 - FERC dataset discovery: GET /api/v1/energy/infrastructure/ferc/assets and GET /api/v1/energy/infrastructure/ferc/datasets/{dataset_id}/details. Configure FERC_API_KEY server-side. The FERC catalog returns provider-managed dataset IDs dynamically.
+
+- PHMSA incident file normalization CLI: `scripts/energy/import_phmsa_incidents.py`; use the reviewed field mapping template in `configs/phmsa_incident_mapping.template.json` only after replacing placeholder headers with exact source data-dictionary fields.
