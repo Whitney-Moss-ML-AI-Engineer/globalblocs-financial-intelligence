@@ -48,6 +48,23 @@ FERC integration uses the official Data.FERC.gov API. Configure FERC_API_KEY ser
 
 The infrastructure database extension adds a source-preserving incident fact table and operator-performance fact table. Incident rows retain the original JSON record, source dataset/version/file, operator identifiers, incident/report dates, state/county, commodity, cause, consequence fields and units. The import process must be driven by the data dictionary for each PHMSA release; field names and reporting definitions must not be assumed identical across all report families.
 
+### PHMSA incident file normalization
+
+The repository includes a source-mapped CSV/TSV normalization CLI:
+
+```bash
+python scripts/energy/import_phmsa_incidents.py \
+  --input /path/to/phmsa_release.txt \
+  --mapping configs/phmsa_incident_mapping.template.json \
+  --output /path/to/phmsa_incidents.normalized.jsonl \
+  --dataset gas_transmission_incidents \
+  --delimiter tab \
+  --source-version 2026-release \
+  --source-url https://www.phmsa.dot.gov/data-and-statistics/pipeline/distribution-transmission-gathering-lng-and-liquid-accident-and-incident-data
+```
+
+Before running it, copy/edit the mapping template to match the exact source headers and data dictionary for the downloaded PHMSA release. The importer validates mapped columns, parses selected date/numeric fields, preserves every original row as `raw_record`, and emits normalized JSON Lines. It does not assume that field names are identical across gas, liquid, LNG or historical files. The JSONL output is a staging artifact; database loading and source-release-specific validation remain separate steps.
+
 ## Data integrity and limitations
 - No synthetic commodity prices or company financials are displayed.
 - yfinance output is labeled historical market data with observation dates and provider disclaimers.
