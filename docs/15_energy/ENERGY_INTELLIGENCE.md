@@ -38,6 +38,14 @@ The EIA query accepts a dataset ID from the catalog and a params object containi
 
 The SEC company facts endpoint resolves a ticker through the SEC company ticker directory, then retrieves its public XBRL Company Facts JSON. Configure SEC_USER_AGENT with an identifying application name and contact email. The starter mapping returns annual observations for revenue, operating income, net income, assets, operating cash flow, capital expenditures, noncurrent long-term debt and equity, including fiscal period, filing form, filed date, accession number, unit and source concept. SEC XBRL taxonomy extensions and company-specific tags may require future issuer-specific mappings. This endpoint currently retrieves facts on request; it does not yet persist them into the energy Gold layer.
 
+## Infrastructure and safety source integration
+
+The infrastructure source catalog exposes public PHMSA pipeline incident downloads, mileage/facility summaries, operator-directory information, LNG plant summaries and flagged incident trend files. PHMSA incident files are downloadable source artifacts with accompanying field definitions; a production ETL must inspect each release's data dictionary, preserve original fields, normalize incident categories and avoid mixing reporting populations or changed reporting thresholds.
+
+Detailed National Pipeline Mapping System (NPMS) GIS information is restricted. The dashboard links only to public PHMSA summaries and the public map/operator directory. It does not ingest or expose restricted pipeline geometry, sensitive facility attributes or protected critical-infrastructure information.
+
+FERC integration uses the official Data.FERC.gov API. Configure FERC_API_KEY server-side. The API's data-assets catalog is queried dynamically because dataset IDs may change; details are then fetched by the returned dataset ID. The initial implementation discovers metadata and does not automatically download every dataset, since some datasets can be large and may not support filtered subsets. FERC API keys are private and must never be sent to the browser.
+
 ## Data integrity and limitations
 - No synthetic commodity prices or company financials are displayed.
 - yfinance output is labeled historical market data with observation dates and provider disclaimers.
