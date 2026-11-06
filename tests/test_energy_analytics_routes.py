@@ -37,3 +37,24 @@ def test_company_analytics_keeps_missing_facts_null(monkeypatch):
     period=response.json()["periods"][0]
     assert period["operating_margin"] is None
     assert period["free_cash_flow"] is None
+
+
+def test_compare_companies_returns_partial_results_and_deduplicates(monkeypatch):
+    def fake_analytics(ticker):
+        if ticker == "BAD":
+            from fastapi import HTTPException
+            raise HTTPException(status_code=404, detail="Ticker not found")
+        return {"ticker": ticker, "periods": [{"period_end": "2024-12-31", "net_margin": 0.1}]}
+    monkeypatch.setattr(energy_analytics_routes, "company_analytics", fake_analytics)
+    response = client.get("/api/v1/energy/analytics/compare?tickers=XOM,CVX,XOM,BAD")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["comparison_count"] == 3
+    assert [item["ticker"] for item in body["results"]] == ["XOM", "CVX", "BAD"]
+    assert body["results"][0]["status"] == "ok"
+    assert body["results"][2]["status"] == "error"
+
+
+def test_compare_companies_limits_batch_size():
+    response = client.get("/api/v1/energy/analytics/compare?tickers=A,B,C,D,E,F")
+    assert response.status_code == 400
