@@ -32,8 +32,11 @@ A first-class domain covering oil, natural gas, exploration and production, oilf
 - GET /api/v1/energy/catalog
 - GET /api/v1/energy/market-data?symbols=XOM,SR,AEE,CL=F,BZ=F,NG=F&period=1y
 - POST /api/v1/energy/eia/query
+- GET /api/v1/energy/sec/company/{ticker}/facts
 
 The EIA query accepts a dataset ID from the catalog and a params object containing EIA API query parameters/facets. The key is read only from server-side EIA_API_KEY. Check EIA category/facet metadata before selecting facet codes; the implementation intentionally does not guess universal series IDs.
+
+The SEC company facts endpoint resolves a ticker through the SEC company ticker directory, then retrieves its public XBRL Company Facts JSON. Configure SEC_USER_AGENT with an identifying application name and contact email. The starter mapping returns annual observations for revenue, operating income, net income, assets, operating cash flow, capital expenditures, noncurrent long-term debt and equity, including fiscal period, filing form, filed date, accession number, unit and source concept. SEC XBRL taxonomy extensions and company-specific tags may require future issuer-specific mappings. This endpoint currently retrieves facts on request; it does not yet persist them into the energy Gold layer.
 
 ## Data integrity and limitations
 - No synthetic commodity prices or company financials are displayed.
