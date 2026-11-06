@@ -30,3 +30,23 @@ analytics:
   gas_utility: [rate_base, allowed_roe, customer_growth, weather_normalized_volume, capital_expenditure]
   electric_utility: [generation_mix, gas_fuel_exposure, load_growth, allowed_roe, rate_base]
   cross_sector: [revenue_growth, ebitda, free_cash_flow, net_debt, interest_coverage, dividend_payout, ev_to_ebitda, roic]
+
+# Source registry extension for infrastructure intelligence
+infrastructure:
+  phmsa:
+    public_sources:
+      - pipeline_incidents
+      - pipeline_mileage
+      - operator_directory
+      - lng_facilities
+      - flagged_incidents
+    restricted_sources:
+      - npms_detailed_pipeline_gis
+    policy: "Use public summaries only. Detailed NPMS GIS is restricted; do not mirror protected critical-infrastructure geometry."
+  ferc:
+    access: "api_key_required"
+    api_key_env: FERC_API_KEY
+    endpoints:
+      assets: "https://api.ferc.gov/v1/data-assets/"
+      dataset_details: "https://api.ferc.gov/v1/dataset/{dataset_id}/details/"
+    policy: "Discover dataset IDs dynamically; do not hard-code IDs. FERC data API does not guarantee filtered subsets for every dataset."
