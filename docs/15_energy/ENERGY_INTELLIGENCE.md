@@ -46,6 +46,8 @@ Detailed National Pipeline Mapping System (NPMS) GIS information is restricted. 
 
 FERC integration uses the official Data.FERC.gov API. Configure FERC_API_KEY server-side. The API's data-assets catalog is queried dynamically because dataset IDs may change; details are then fetched by the returned dataset ID. The initial implementation discovers metadata and does not automatically download every dataset, since some datasets can be large and may not support filtered subsets. FERC API keys are private and must never be sent to the browser.
 
+The infrastructure database extension adds a source-preserving incident fact table and operator-performance fact table. Incident rows retain the original JSON record, source dataset/version/file, operator identifiers, incident/report dates, state/county, commodity, cause, consequence fields and units. The import process must be driven by the data dictionary for each PHMSA release; field names and reporting definitions must not be assumed identical across all report families.
+
 ## Data integrity and limitations
 - No synthetic commodity prices or company financials are displayed.
 - yfinance output is labeled historical market data with observation dates and provider disclaimers.
