@@ -23,6 +23,7 @@ CONCEPTS = {
     "capital_expenditures": ["PaymentsToAcquirePropertyPlantAndEquipment"],
     "long_term_debt": ["LongTermDebtNoncurrent", "LongTermDebt"],
     "equity": ["StockholdersEquity"],
+    "cash_and_equivalents": ["CashAndCashEquivalentsAtCarryingValue", "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"],
 }
 HEADERS = {"User-Agent": os.getenv("SEC_USER_AGENT", "GlobalBLOCS Financial Intelligence contact: configure-SEC_USER_AGENT"), "Accept-Encoding": "gzip, deflate", "Host": "www.sec.gov"}
 
