@@ -58,7 +58,7 @@ def company_analytics(ticker:str):
             "long_term_debt_to_assets":_ratio(debt,assets),
             "long_term_debt_to_equity":_ratio(debt,equity),
             "net_debt":(debt-cash) if debt is not None and cash is not None else None,
-            "capital_expenditure_intensity":_ratio(abs(capex),revenue),
+            "capital_expenditure_intensity":_ratio(abs(capex),revenue) if capex is not None else None,
             "source_filing":(metrics["revenue"].get(period) or metrics["net_income"].get(period) or {}).get("accession_number")
         })
     return {
