@@ -23,7 +23,21 @@
     $("energySecFinancials").innerHTML="<div class='tablewrap'><table><thead><tr>"+cols.map(c=>"<th>"+c[1]+"</th>").join("")+"</tr></thead><tbody>"+rows.sort((a,b)=>String(b.period_end).localeCompare(String(a.period_end))).map(row=>"<tr>"+cols.map(c=>"<td>"+esc(c[0]==="value"?fmt(row[c[0]]):row[c[0]])+"</td>").join("")+"</tr>").join("")+"</tbody></table></div>";
    }
    $("energySecSources").innerHTML="Sources: <a href='"+esc(d.source_url)+"' target='_blank' rel='noopener'>SEC Company Facts JSON</a> · <a href='"+esc(d.filing_source_url)+"' target='_blank' rel='noopener'>SEC filings</a><p class='note'>"+(d.limitations||[]).map(esc).join("<br>")+"</p>";
-   $("energySecStatus").textContent="SEC EDGAR facts retrieved • "+rows.length+" annual observations • source periods and filing references retained.";
+   try{
+    const ar=await fetch(API+"/api/v1/energy/analytics/company/"+encodeURIComponent(ticker));
+    const ad=await ar.json();if(!ar.ok)throw Error(ad.detail||ar.statusText);
+    const labels={revenue_growth:"Revenue growth",operating_margin:"Operating margin",net_margin:"Net margin",free_cash_flow:"Free cash flow",free_cash_flow_margin:"FCF margin",cash_conversion:"Cash conversion",return_on_assets:"Return on assets",return_on_equity:"Return on equity",long_term_debt_to_assets:"Long-term debt / assets",long_term_debt_to_equity:"Long-term debt / equity",net_debt:"Net debt",capital_expenditure_intensity:"Capex / revenue"};
+    const percentages=new Set(["revenue_growth","operating_margin","net_margin","free_cash_flow_margin","cash_conversion","return_on_assets","return_on_equity","long_term_debt_to_assets","long_term_debt_to_equity","capital_expenditure_intensity"]);
+    const dollars=new Set(["free_cash_flow","net_debt"]);
+    const rowsOut=[];
+    (ad.periods||[]).forEach(p=>Object.keys(labels).forEach(key=>{
+      const value=p[key];let display="—",unit=percentages.has(key)?"%":dollars.has(key)?"USD":"ratio";
+      if(value!==null&&value!==undefined)display=percentages.has(key)?(value*100).toFixed(2)+"%":dollars.has(key)?fmt(value):Number(value).toFixed(3);
+      rowsOut.push({metric:labels[key],period:p.period_end,value:display,unit});
+    }));
+    $("energySecAnalytics").innerHTML=rowsOut.length?"<div class='tablewrap'><table><thead><tr><th>Metric</th><th>Period end</th><th>Value</th><th>Unit</th></tr></thead><tbody>"+rowsOut.map(x=>"<tr><td>"+esc(x.metric)+"</td><td>"+esc(x.period)+"</td><td>"+esc(x.value)+"</td><td>"+esc(x.unit)+"</td></tr>").join("")+"</tbody></table></div><p class='note'>"+esc(ad.methodology.free_cash_flow)+" "+esc(ad.methodology.return_on_assets)+" "+esc(ad.methodology.limitations)+"</p>":"<p class='note'>No derived ratios available; required SEC facts may be missing.</p>";
+   }catch(e){$("energySecAnalytics").textContent="Derived analytics unavailable: "+e.message;}
+   $("energySecStatus").textContent="SEC EDGAR facts retrieved • "+rows.length+" annual observations • derived metrics loaded where source facts permit.";
   }catch(e){$("energySecStatus").textContent=e.message;}
  }
  $("energyLoadSec")?.addEventListener("click",load);
