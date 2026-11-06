@@ -32,5 +32,7 @@ def test_import_rejects_unmapped_source_headers(tmp_path):
         import_file(source,mapping,tmp_path/"out.jsonl","dataset","auto",None,None)
 
 def test_import_rejects_missing_source_record_identifier(tmp_path):
-    with pytest.raises(ValueError,match="source_record_id"):
-        load_mapping(tmp_path/"bad.json") if (tmp_path/"bad.json").exists() else (_ for _ in ()).throw(ValueError("Mapping must be a non-empty JSON object."))
+    bad=tmp_path/"bad.json"
+    bad.write_text("{}")
+    with pytest.raises(ValueError,match="Mapping must contain at least one"):
+        load_mapping(bad)
