@@ -40,5 +40,41 @@
    $("energySecStatus").textContent="SEC EDGAR facts retrieved • "+rows.length+" annual observations • derived metrics loaded where source facts permit.";
   }catch(e){$("energySecStatus").textContent=e.message;}
  }
+
+ function comparePeers(){
+  const raw=$("energyPeerTickers")?.value||"";
+  const tickers=[...new Set(raw.split(",").map(x=>x.trim().toUpperCase()).filter(Boolean))];
+  if(!tickers.length){$("energyPeerStatus").textContent="Enter at least one ticker.";return;}
+  if(tickers.length>5){$("energyPeerStatus").textContent="Please compare no more than five unique tickers per request.";return;}
+  $("energyPeerStatus").textContent="Retrieving SEC facts for "+tickers.join(", ")+"…";
+  $("energyPeerResults").innerHTML="";
+  fetch(API+"/api/v1/energy/analytics/compare?tickers="+encodeURIComponent(tickers.join(",")))
+   .then(async response=>{const data=await response.json();if(!response.ok)throw Error(data.detail||response.statusText);return data;})
+   .then(data=>{
+    const metrics=[
+     ["revenue_growth","Revenue growth"],["operating_margin","Operating margin"],["net_margin","Net margin"],
+     ["free_cash_flow_margin","FCF margin"],["return_on_assets","ROA"],["return_on_equity","ROE"],
+     ["long_term_debt_to_assets","Debt / assets"],["net_debt","Net debt"]
+    ];
+    const percent=new Set(metrics.slice(0,7).map(x=>x[0]));
+    const headers=["Issuer","Period end",...metrics.map(x=>x[1])];
+    const rows=(data.results||[]).map(item=>{
+     if(item.status!=="ok")return "<tr><td>"+esc(item.ticker)+"</td><td colspan='"+(headers.length-1)+"'>Unavailable: "+esc(item.error||"SEC data unavailable")+"</td></tr>";
+     const periods=item.data?.periods||[];
+     const p=periods[0]||{};
+     const cells=metrics.map(([key])=>{
+      const v=p[key];if(v===null||v===undefined)return "—";
+      return percent.has(key)?(Number(v)*100).toFixed(2)+"%":fmt(Number(v));
+     });
+     return "<tr><td>"+esc(item.ticker)+"</td><td>"+esc(p.period_end||"—")+"</td>"+cells.map(v=>"<td>"+esc(v)+"</td>").join("")+"</tr>";
+    });
+    $("energyPeerResults").innerHTML="<div class='tablewrap'><table><thead><tr>"+headers.map(x=>"<th>"+esc(x)+"</th>").join("")+"</tr></thead><tbody>"+rows.join("")+"</tbody></table></div><p class='note'>"+esc(data.methodology||"")+"</p>";
+    const ok=(data.results||[]).filter(x=>x.status==="ok").length;
+    $("energyPeerStatus").textContent=ok+" of "+data.comparison_count+" issuer records returned successfully.";
+   })
+   .catch(error=>{$("energyPeerStatus").textContent="Comparison unavailable: "+error.message;});
+ }
+ $("energyComparePeers")?.addEventListener("click",comparePeers);
+
  $("energyLoadSec")?.addEventListener("click",load);
 })();
