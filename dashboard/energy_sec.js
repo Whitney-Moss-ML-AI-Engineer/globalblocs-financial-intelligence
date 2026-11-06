@@ -3,7 +3,7 @@
  const API=window.GLOBALBLOCS_API_BASE||(location.protocol==="http:"||location.protocol==="https:"?location.origin:"http://127.0.0.1:8000");
  const $=id=>document.getElementById(id);
  const esc=v=>String(v??"—").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
- const labels={revenue:"Revenue",operating_income:"Operating income",net_income:"Net income",assets:"Total assets",cash_from_operations:"Cash from operations",capital_expenditures:"Capital expenditures (reported cash outflow)",long_term_debt:"Long-term debt (reported concepts)",equity:"Stockholders' equity"};
+ const labels={revenue:"Revenue",operating_income:"Operating income",net_income:"Net income",assets:"Total assets",cash_from_operations:"Cash from operations",capital_expenditures:"Capital expenditures (reported cash outflow)",long_term_debt:"Long-term debt (reported concepts)",equity:"Stockholders' equity",cash_and_equivalents:"Cash and cash equivalents"};
  const fmt=v=>typeof v==="number"?new Intl.NumberFormat("en-US",{maximumFractionDigits:0}).format(v):v;
  async function load(){
   const ticker=$("energySecTicker").value.trim().toUpperCase();
