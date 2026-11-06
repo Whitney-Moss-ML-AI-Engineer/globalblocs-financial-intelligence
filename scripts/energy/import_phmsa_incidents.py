@@ -47,7 +47,7 @@ def normalize_row(row:dict[str,str],mapping:dict[str,str],dataset:str,source_fil
 
 def load_mapping(path:Path)->dict[str,str]:
  mapping=json.loads(path.read_text(encoding="utf-8"))
- if not isinstance(mapping,dict) or not mapping:raise ValueError("Mapping must be a non-empty JSON object.")
+ if not isinstance(mapping,dict) or not mapping:raise ValueError("Mapping must contain at least one source-field mapping; provide a non-empty JSON object.")
  mapping.pop("_comment",None)
  if not mapping:raise ValueError("Mapping must contain at least one source-field mapping.")
  unknown=set(mapping)-ALLOWED_FIELDS
