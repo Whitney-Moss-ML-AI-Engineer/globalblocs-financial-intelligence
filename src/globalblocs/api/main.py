@@ -15,6 +15,7 @@ from globalblocs.api.rag_routes import router as rag_router
 from globalblocs.api.energy_routes import router as energy_router
 from globalblocs.api.energy_sec_routes import router as energy_sec_router
 from globalblocs.api.energy_infrastructure_routes import router as energy_infrastructure_router
+from globalblocs.api.energy_analytics_routes import router as energy_analytics_router
 
 app = FastAPI(
     title="GlobalBLOCS Financial Intelligence API",
@@ -28,6 +29,7 @@ app.include_router(rag_router)
 app.include_router(energy_router)
 app.include_router(energy_sec_router)
 app.include_router(energy_infrastructure_router)
+app.include_router(energy_analytics_router)
 
 # Serve the production dashboard from the same FastAPI origin. This keeps the
 # dashboard and API version-aligned and avoids file:// origin/CORS problems.
